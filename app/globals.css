@@ -35,12 +35,12 @@ img { display: block; }
 }
 .visor-imagen .hueco { background: var(--hueco); height: 58vh; }
 .visor-imagen img.acerca { max-height: 32vh; }
-.visor .flechas { align-self: flex-end; display: flex; gap: 16px; margin-top: 12px; font-size: 16px; min-height: 22px; }
+.visor .flechas { align-self: flex-end; display: flex; gap: 12px; margin-top: 10px; font-size: 12px; min-height: 18px; }
 
 .ficha {
   position: fixed; left: 36px; bottom: var(--base); width: min(560px, 27vw);
   max-height: calc(100vh - var(--base) - 110px); overflow-y: auto;
-  font-size: 16px; line-height: 1.5; white-space: pre-line;
+  font-size: 14px; line-height: 1.5; white-space: pre-line;
 }
 
 .cv-escritorio {
@@ -50,7 +50,7 @@ img { display: block; }
 .cv-col { display: flex; flex-direction: column; gap: 32px; }
 .cv-bloque { display: flex; flex-direction: column; gap: 18px; }
 .cv-col h3 { font-weight: 400; font-size: 13px; text-transform: uppercase; }
-.cv-col p { font-size: 16px; line-height: 1.5; white-space: pre-line; }
+.cv-col p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
 
 /* Índice lateral */
 .indice {
@@ -61,7 +61,7 @@ img { display: block; }
   cursor: pointer;
 }
 .indice.abierto { transform: none; cursor: default; }
-.indice-flecha { position: absolute; left: 36px; top: 30px; font-size: 22px; }
+.indice-flecha { position: absolute; left: 36px; top: 36px; font-size: 16px; }
 .indice-titulo {
   position: absolute; right: 36px; top: 40px; font-size: 16px; text-transform: uppercase;
   opacity: 0; transition: opacity .35s;
@@ -74,7 +74,7 @@ img { display: block; }
 }
 .filas li a {
   display: flex; justify-content: space-between; align-items: center; height: 36px;
-  font-size: 16px; font-weight: 400; background: var(--puntos);
+  font-size: 14px; font-weight: 400; background: var(--puntos);
 }
 .filas li.sel .titulo { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .filas.extra { margin-top: 24px; }
@@ -91,7 +91,7 @@ img { display: block; }
 }
 .zoom-imagen { position: relative; width: 100%; height: 100%; }
 .zoom-cerrar { position: absolute; top: 24px; right: 24px; font-size: 13px; text-transform: uppercase; padding: 8px; }
-.zoom-flechas { position: absolute; bottom: 20px; right: 24px; display: flex; gap: 8px; font-size: 16px; }
+.zoom-flechas { position: absolute; bottom: 20px; right: 24px; display: flex; gap: 8px; font-size: 13px; }
 .zoom-flechas button { padding: 8px; }
 @keyframes aparecer { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .zoom { animation: none; } }
@@ -110,9 +110,9 @@ img { display: block; }
   .capa { position: absolute; inset: 0; opacity: 0; transition: opacity .3s; pointer-events: none; }
   .capa.activa { opacity: 1; pointer-events: auto; }
   .caja .hueco { background: var(--hueco); }
-  .entrada .flechas { display: flex; justify-content: flex-end; gap: 16px; font-size: 13px; margin-top: -4px; }
+  .entrada .flechas { display: flex; justify-content: flex-end; gap: 12px; font-size: 12px; margin-top: -4px; }
   .entrada .flechas button { padding: 4px 0; }
-  .entrada p { font-size: 16px; line-height: 1.5; white-space: pre-line; }
+  .entrada p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
   .entrada .foto { width: 167px; height: auto; }
   .entrada .cv-bloque { display: flex; flex-direction: column; gap: 14px; }
   .entrada h3 { font-weight: 400; font-size: 13px; text-transform: uppercase; }
@@ -131,7 +131,7 @@ img { display: block; }
     display: flex; justify-content: space-between; align-items: baseline; width: 100%;
     padding: 19px 16px 40px; text-align: left; font-size: 16px; text-transform: uppercase;
   }
-  .menu-flecha { font-size: 22px; }
+  .menu-flecha { font-size: 16px; }
   .menu-lista { position: absolute; left: 16px; right: 16px; bottom: 12px; }
   .menu-lista .cabecera { font-size: 11px; }
   .menu-lista .filas li a { font-size: 14px; }
