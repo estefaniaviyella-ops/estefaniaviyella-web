@@ -137,12 +137,12 @@ export default function Sitio() {
               <div className="visor-imagen">
                 {mostrada === 'acerca' ? (
                   <Image key="acerca" className="acerca" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella"
-                    width={439} height={659} sizes="25vw" onClick={ampliarAcerca} style={{ height: '40vh', width: 'auto' }} />
+                    width={439} height={659} sizes="25vw" onClick={ampliarAcerca} style={{ height: '36vh', width: 'auto' }} />
                 ) : o.imagenes ? (
                   <Image key={o.id + imagen} src={'/img/' + o.imagenes[imagen][0]} alt={o.titulo}
                     width={o.imagenes[imagen][1]} height={o.imagenes[imagen][2]} sizes="(min-width: 900px) 60vw, 100vw"
                     priority={o.id === INICIO} onClick={() => ampliarObra(o, imagen)}
-                    style={{ height: `min(72vh, calc((73vw - 322px) * ${o.imagenes[imagen][2] / o.imagenes[imagen][1]}))`, width: 'auto' }} />
+                    style={{ height: `min(64vh, calc((70vw - 390px) * ${o.imagenes[imagen][2] / o.imagenes[imagen][1]}))`, width: 'auto' }} />
                 ) : (
                   <div className="hueco" style={{ aspectRatio: `${o.hueco[0]} / ${o.hueco[1]}` }} />
                 )}
