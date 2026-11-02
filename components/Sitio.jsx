@@ -142,14 +142,14 @@ export default function Sitio() {
                 ) : (
                   <div className="hueco" style={{ aspectRatio: `${o.hueco[0]} / ${o.hueco[1]}` }} />
                 )}
-              </div>
-              <div className="flechas" style={{ visibility: o?.imagenes?.length > 1 ? 'visible' : 'hidden' }}>
-                {o?.imagenes?.length > 1 && (
-                  <>
-                    <button type="button" aria-label="Imagen anterior" onClick={() => setImagen((imagen - 1 + o.imagenes.length) % o.imagenes.length)}>←</button>
-                    <button type="button" aria-label="Imagen siguiente" onClick={() => setImagen((imagen + 1) % o.imagenes.length)}>→</button>
-                  </>
-                )}
+                <div className="flechas" style={{ visibility: o?.imagenes?.length > 1 ? 'visible' : 'hidden' }}>
+                  {o?.imagenes?.length > 1 && (
+                    <>
+                      <button type="button" aria-label="Imagen anterior" onClick={() => setImagen((imagen - 1 + o.imagenes.length) % o.imagenes.length)}>←</button>
+                      <button type="button" aria-label="Imagen siguiente" onClick={() => setImagen((imagen + 1) % o.imagenes.length)}>→</button>
+                    </>
+                  )}
+                </div>
               </div>
             </figure>
             <p className="ficha">{mostrada === 'acerca' ? ACERCA.texto : fichaDe(o)}</p>
