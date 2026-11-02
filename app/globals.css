@@ -24,6 +24,10 @@ img { display: block; }
 
 /* ───────── Escritorio ───────── */
 .movil { display: none; }
+/* franja bajo el nombre para que el texto que sube al bajar no lo pise */
+@media (min-width: 900px) {
+  body::before { content: ""; position: fixed; z-index: 15; inset: 0 0 auto 0; height: 96px; background: var(--fondo); }
+}
 
 .visor {
   position: fixed; top: 0; bottom: 0; left: 30vw; width: 35vw;
@@ -39,17 +43,24 @@ img { display: block; }
 
 .ficha {
   position: fixed; left: 36px; bottom: var(--base); width: min(560px, 27vw);
-  max-height: calc(100vh - var(--base) - 110px); overflow-y: auto;
   font-size: 14px; line-height: 1.5; white-space: pre-line;
 }
 
 .cv-escritorio {
-  position: fixed; left: 36px; right: 250px; top: 110px; bottom: var(--base); overflow-y: auto;
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 32px; align-items: start;
+  /* fluye con la página: se baja con el scroll normal y lo fijo (nombre, índice) se queda */
+  margin: 0 250px 0 36px; padding: 110px 0 var(--base); min-height: 100vh;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 32px; align-content: end; align-items: start;
 }
+/* Acerca: el texto fluye con la página y la foto se queda fija */
+.largo {
+  position: relative; z-index: 1; width: min(560px, 27vw); margin-left: 36px; min-height: 100vh;
+  padding: 110px 0 var(--base); display: flex; flex-direction: column; justify-content: flex-end;
+}
+.texto-largo { font-size: 14px; line-height: 1.5; white-space: pre-line; }
+
 .cv-col { display: flex; flex-direction: column; gap: 32px; }
 .cv-bloque { display: flex; flex-direction: column; gap: 18px; }
-.cv-col h3 { font-weight: 400; font-size: 13px; text-transform: uppercase; }
+.cv-col h3 { font-weight: 700; font-size: 13px; text-transform: uppercase; }
 .cv-col p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
 
 /* Índice lateral */
@@ -115,7 +126,7 @@ img { display: block; }
   .entrada p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
   .entrada .foto { width: 167px; height: auto; }
   .entrada .cv-bloque { display: flex; flex-direction: column; gap: 14px; }
-  .entrada h3 { font-weight: 400; font-size: 13px; text-transform: uppercase; }
+  .entrada h3 { font-weight: 700; font-size: 13px; text-transform: uppercase; }
   .entrada .espacio { height: 12px; }
   .pie { display: flex; gap: 24px; padding: 26px 0; }
   .pie a { font-family: var(--grotesk); font-weight: 500; font-size: 14px; text-transform: uppercase; padding: 13px 0; }

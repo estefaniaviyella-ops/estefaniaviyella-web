@@ -1,7 +1,7 @@
 import { Chivo_Mono, Familjen_Grotesk } from 'next/font/google';
 import './globals.css';
 
-const mono = Chivo_Mono({ subsets: ['latin', 'latin-ext'], weight: ['300', '400'], variable: '--fuente-mono' });
+const mono = Chivo_Mono({ subsets: ['latin', 'latin-ext'], weight: ['300', '400', '700'], variable: '--fuente-mono' });
 const grotesk = Familjen_Grotesk({ subsets: ['latin'], weight: ['400', '500'], variable: '--fuente-grotesk' });
 
 export const metadata = {
