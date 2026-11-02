@@ -54,7 +54,7 @@ function CVColumnas() {
 }
 
 // Imágenes de una obra en móvil: caja fija y flechas
-function Carrusel({ o, onAmpliar }) {
+function Carrusel({ o, onAmpliar, arriba }) {
   const [i, setI] = useState(0);
   const n = o.imagenes.length;
   const alto = Math.max(...o.imagenes.map(([, w, h]) => h / w));
@@ -63,7 +63,9 @@ function Carrusel({ o, onAmpliar }) {
       <div className="caja" style={{ aspectRatio: `1 / ${alto}` }}>
         {o.imagenes.map(([src], k) => (
           <div key={src} className={'capa' + (k === i ? ' activa' : '')} onClick={() => onAmpliar(o, k)}>
-            <Image src={'/img/' + src} alt={o.titulo} fill sizes="100vw" style={{ objectFit: 'contain' }} />
+            {/* las obras del principio se piden al momento; el resto, al acercarse */}
+            <Image src={'/img/' + src} alt={o.titulo} fill sizes="100vw" style={{ objectFit: 'contain' }}
+              loading={arriba && k === 0 ? 'eager' : 'lazy'} fetchPriority={arriba && k === 0 ? 'high' : 'auto'} />
           </div>
         ))}
       </div>
@@ -91,6 +93,7 @@ export default function Sitio() {
 
   const elegir = useCallback(id => {
     setSeleccion(id); setVista(null); setImagen(0); setIndiceAbierto(false);
+    window.scrollTo(0, 0);
     try { history.replaceState(null, '', id === INICIO ? location.pathname : '#' + id); } catch {}
   }, []);
 
@@ -152,7 +155,9 @@ export default function Sitio() {
                 </div>
               </div>
             </figure>
-            <p className="ficha">{mostrada === 'acerca' ? ACERCA.texto : fichaDe(o)}</p>
+            {mostrada === 'acerca'
+              ? <div className="largo"><p className="texto-largo">{ACERCA.texto}</p></div>
+              : <p className="ficha">{fichaDe(o)}</p>}
           </>
         )}
       </main>
@@ -178,9 +183,9 @@ export default function Sitio() {
       {/* ───────── Móvil ───────── */}
       <div className="movil">
         <div className="feed">
-          {OBRAS.map(ob => (
+          {OBRAS.map((ob, n) => (
             <section key={ob.id} className="entrada" id={'m-' + ob.id}>
-              {ob.imagenes ? <Carrusel o={ob} onAmpliar={ampliarObra} /> : (
+              {ob.imagenes ? <Carrusel o={ob} onAmpliar={ampliarObra} arriba={n < 2} /> : (
                 <div className="caja"><div className="hueco" style={{ aspectRatio: `${ob.hueco[0]} / ${ob.hueco[1]}` }} /></div>
               )}
               <p>{fichaDe(ob)}</p>
