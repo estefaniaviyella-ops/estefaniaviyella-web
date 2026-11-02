@@ -73,7 +73,7 @@ img { display: block; }
 }
 .filas li a {
   display: flex; justify-content: space-between; align-items: center; height: 36px;
-  font-size: 16px; background: var(--puntos);
+  font-size: 16px; font-weight: 400; background: var(--puntos);
 }
 .filas li.sel .titulo { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .filas.extra { margin-top: 24px; }
