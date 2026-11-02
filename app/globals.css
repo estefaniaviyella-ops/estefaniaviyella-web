@@ -30,15 +30,15 @@ img { display: block; }
 }
 
 .visor {
-  position: fixed; top: 0; bottom: 0; left: 30vw; width: 35vw;
+  position: fixed; top: 0; bottom: 0; left: calc(27vw + 72px); right: 250px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .visor-imagen { display: inline-flex; flex-direction: column; align-items: center; }
 .visor-imagen img, .visor-imagen .hueco {
-  max-height: 58vh; max-width: 35vw; width: auto; height: auto; object-fit: contain;
+  max-height: 72vh; max-width: calc(73vw - 322px); width: auto; height: auto; object-fit: contain;
 }
-.visor-imagen .hueco { background: var(--hueco); height: 58vh; }
-.visor-imagen img.acerca { max-height: 32vh; }
+.visor-imagen .hueco { background: var(--hueco); height: 72vh; }
+.visor-imagen img.acerca { max-height: 40vh; }
 .visor .flechas { align-self: flex-end; display: flex; gap: 12px; margin-top: 10px; font-size: 12px; min-height: 18px; }
 
 .ficha {
