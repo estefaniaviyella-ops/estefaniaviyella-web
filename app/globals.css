@@ -10,7 +10,7 @@
   --puntos-izquierda: linear-gradient(to bottom, var(--tinta) 1px, transparent 1px) 0 0 / 1px 4px repeat-y;
   --g: 36px;
   --pestana: 56px;
-  --contacto: 56px;
+  --contacto: 0px;
   --franja: 48px;
 }
 
@@ -56,18 +56,10 @@ img { display: block; }
 .visor .hueco { background: var(--hueco); cursor: default; }
 .visor .flechas { align-self: flex-end; display: flex; gap: 12px; margin-top: 10px; font-size: 12px; min-height: 18px; }
 .ficha {
-  position: absolute; left: var(--g); bottom: 24px; width: min(640px, 30vw);
+  position: absolute; left: var(--g); bottom: 36px; width: min(640px, 30vw);
   font-size: 14px; line-height: 1.5;
 }
 
-/* ───────── Contacto ───────── */
-.contacto { display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; height: var(--contacto); padding: 0 var(--g); }
-.contacto .etiqueta { font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
-.contacto a { font-family: var(--grotesk); font-weight: 500; font-size: 14px; text-transform: uppercase; }
-.contacto-escritorio {
-  position: fixed; z-index: 15; left: 0; right: var(--lateral); bottom: 0;
-  background: var(--fondo) var(--puntos-arriba); transition: right .35s ease-out;
-}
 
 /* ───────── Escritorio: pestañas verticales ───────── */
 .lateral { position: fixed; z-index: 20; top: 0; right: 0; bottom: 0; display: flex; background: var(--menta); }
@@ -102,6 +94,8 @@ img { display: block; }
 .acerca { display: flex; flex-direction: column; gap: 28px; }
 .acerca .foto { width: 220px; height: auto; cursor: zoom-in; }
 .acerca p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
+.redes { display: flex; gap: 24px; }
+.redes a { font-family: var(--grotesk); font-weight: 500; font-size: 14px; text-transform: uppercase; padding: 8px 0; }
 
 .cv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; align-items: start; }
 .cv-col { display: flex; flex-direction: column; gap: 32px; }
@@ -123,29 +117,30 @@ img { display: block; }
 .zoom-flechas { position: absolute; bottom: 20px; right: 24px; display: flex; gap: 8px; font-size: 13px; }
 .zoom-flechas button { padding: 8px; }
 @keyframes aparecer { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .zoom, .desplegable, .panel { animation: none; } .escena, .contacto-escritorio { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .zoom, .desplegable, .panel { animation: none; } .escena { transition: none; } }
 
 /* ───────── Móvil: franjas abajo ───────── */
 @media (max-width: 899px) {
-  :root { --g: 16px; --contacto: 48px; }
+  :root { --g: 16px; }
   .sitio {
-    --alto-menu: calc(var(--contacto) + 3 * var(--franja));
+    --alto-menu: calc(4 * var(--franja));   /* tres franjas + pie con Instagram y Email */
     --alto-img: calc(100dvh - var(--alto-menu) - 72px - 110px);
     --ancho-img: calc(100vw - 32px);
   }
-  .lateral, .contacto-escritorio { display: none; }
+  .lateral { display: none; }
   .nombre { top: 24px; font-size: 16px; }
   .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; padding: 72px var(--g) 16px; }
   .ficha { position: static; width: 100%; margin-top: 8px; }
 
   .menu { display: block; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; background: var(--menta); }
-  .contacto { grid-template-columns: auto auto 1fr; gap: 20px; }
   .franja {
     display: flex; justify-content: space-between; align-items: center; width: 100%; height: var(--franja);
     padding: 0 var(--g); background: var(--puntos-arriba);
     font-weight: 400; font-size: 14px; text-transform: uppercase; letter-spacing: .06em;
   }
   .franja span:last-child { font-size: 18px; font-weight: 300; }
+  .pie-movil { display: flex; align-items: center; gap: 24px; height: var(--franja); padding: 0 var(--g); background: var(--puntos-arriba); }
+  .pie-movil a { font-family: var(--grotesk); font-weight: 500; font-size: 14px; text-transform: uppercase; padding: 12px 0; }
 
   .desplegable {
     display: flex; flex-direction: column; position: fixed; z-index: 40; inset: 0; background: var(--menta);
