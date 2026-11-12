@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { OBRAS, ACERCA, CV, REDES } from '../lib/contenido';
 
 const INICIO = OBRAS[0].id;
-const EXTRA = [['acerca', 'Acerca'], ['cv', 'CV']];
+const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV']];
 const fichaDe = o => `(${o.titulo}). ${o.año}.${o.ficha ? ' ' + o.ficha : ''}`;
 const obra = id => OBRAS.find(o => o.id === id);
 const enlace = ([texto, url]) => (
@@ -13,218 +13,163 @@ const enlace = ([texto, url]) => (
 );
 const EntradaCV = ({ e: [t, l, a] }) => <p>{`${t}\n${l}\n${a}`}</p>;
 
-// Filas del índice, compartidas por escritorio y móvil
-function Filas({ seleccion, onElegir, onPasar }) {
-  const fila = (id, titulo, dato) => (
-    <li key={id} className={id === seleccion ? 'sel' : undefined} onMouseOver={onPasar && (() => onPasar(id))}>
-      <a href={'#' + id} onClick={e => { e.preventDefault(); onElegir(id); }}>
-        <span className="titulo">{titulo}</span><span>{dato}</span>
-      </a>
-    </li>
-  );
+// Imagen de una obra a la medida del hueco libre (el CSS fija el alto con --alto-img y --ancho-img)
+function Obra({ src, w, h, alt, onClick }) {
   return (
-    <>
-      <div className="cabecera"><span>Título</span><span>Año</span></div>
-      <ul className="filas">{OBRAS.map(o => fila(o.id, `(${o.titulo})`, o.año))}</ul>
-      <ul className="filas extra">{EXTRA.map(([id, t]) => fila(id, t, '→'))}</ul>
-    </>
+    <Image src={'/img/' + src} alt={alt} width={w} height={h} sizes="(min-width: 900px) 60vw, 100vw" priority
+      onClick={onClick} className="obra-img" style={{ '--r': h / w }} />
+  );
+}
+
+function ListaObras({ seleccion, onElegir }) {
+  const [vista, setVista] = useState(seleccion);
+  const o = obra(vista);
+  return (
+    <div className="obras">
+      <div className="lista">
+        <div className="cabecera"><span>Título</span><span>Año</span></div>
+        <ul className="filas" onMouseLeave={() => setVista(seleccion)}>
+          {OBRAS.map(ob => (
+            <li key={ob.id} className={ob.id === seleccion ? 'sel' : undefined} onMouseEnter={() => setVista(ob.id)}>
+              <a href={'#' + ob.id} onClick={e => { e.preventDefault(); onElegir(ob.id); }}>
+                <span className="titulo">({ob.titulo})</span><span>{ob.año}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="vista-previa" aria-hidden="true">
+        {o.imagenes
+          ? <Image key={o.id} src={'/img/' + o.imagenes[0][0]} alt="" width={o.imagenes[0][1]} height={o.imagenes[0][2]} sizes="30vw" />
+          : <div className="hueco" style={{ aspectRatio: `${o.hueco[0]} / ${o.hueco[1]}` }} />}
+        <p>{fichaDe(o)}</p>
+      </div>
+    </div>
+  );
+}
+
+function Acerca({ onAmpliar }) {
+  return (
+    <div className="acerca">
+      <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={439} height={659} sizes="220px" onClick={onAmpliar} />
+      <p>{ACERCA.texto}</p>
+    </div>
   );
 }
 
 function CVColumnas() {
-  const col = (...bloques) => (
-    <div className="cv-col">
-      {bloques.map(([titulo, items], i) => (
-        <div key={titulo + i} className="cv-bloque">
-          <h3>{titulo}</h3>
-          {items.map(e => <EntradaCV key={e[0]} e={e} />)}
-        </div>
-      ))}
+  const bloque = ([titulo, items]) => (
+    <div key={titulo} className="cv-bloque">
+      <h3>{titulo}</h3>
+      {items.map(e => <EntradaCV key={e[0]} e={e} />)}
     </div>
   );
   const col2 = CV['Exposiciones colectivas'], mitad = Math.ceil(col2.length / 2);
   return (
-    <section className="cv-escritorio">
-      {col(['Exposiciones individuales', CV['Exposiciones individuales']], ['Ferias', CV['Ferias']])}
-      {col(['Exposiciones colectivas', col2.slice(0, mitad)])}
-      {col([' ', col2.slice(mitad)])}
-      {col(['Educación', CV['Educación']], ['Reconocimientos', CV['Reconocimientos']])}
-    </section>
-  );
-}
-
-// Imágenes de una obra en móvil: caja fija y flechas
-function Carrusel({ o, onAmpliar, arriba }) {
-  const [i, setI] = useState(0);
-  const n = o.imagenes.length;
-  const alto = Math.max(...o.imagenes.map(([, w, h]) => h / w));
-  return (
-    <>
-      <div className="caja" style={{ aspectRatio: `1 / ${alto}` }}>
-        {o.imagenes.map(([src], k) => (
-          <div key={src} className={'capa' + (k === i ? ' activa' : '')} onClick={() => onAmpliar(o, k)}>
-            {/* las obras del principio se piden al momento; el resto, al acercarse */}
-            <Image src={'/img/' + src} alt={o.titulo} fill sizes="100vw" style={{ objectFit: 'contain' }}
-              loading={arriba && k === 0 ? 'eager' : 'lazy'} fetchPriority={arriba && k === 0 ? 'high' : 'auto'} />
-          </div>
-        ))}
-      </div>
-      {n > 1 && (
-        <div className="flechas">
-          <button type="button" aria-label="Imagen anterior" onClick={() => setI((i - 1 + n) % n)}>←</button>
-          <button type="button" aria-label="Imagen siguiente" onClick={() => setI((i + 1) % n)}>→</button>
-        </div>
-      )}
-    </>
+    <div className="cv">
+      <div className="cv-col">{bloque(['Exposiciones individuales', CV['Exposiciones individuales']])}{bloque(['Ferias', CV['Ferias']])}</div>
+      <div className="cv-col">{bloque(['Exposiciones colectivas', col2.slice(0, mitad)])}</div>
+      <div className="cv-col cv-sigue">{bloque([' ', col2.slice(mitad)])}</div>
+      <div className="cv-col">{bloque(['Educación', CV['Educación']])}{bloque(['Reconocimientos', CV['Reconocimientos']])}</div>
+    </div>
   );
 }
 
 export default function Sitio() {
   const [seleccion, setSeleccion] = useState(INICIO);
-  const [vista, setVista] = useState(null);        // obra bajo el ratón en el índice
   const [imagen, setImagen] = useState(0);
-  const [indiceAbierto, setIndiceAbierto] = useState(false);
-  const [menuAbierto, setMenuAbierto] = useState(false);
-  const [zoom, setZoom] = useState(null);          // { lista, i, alt }
-  const [conRaton, setConRaton] = useState(false);
+  const [abierta, setAbierta] = useState(null);   // sección desplegada: 'obras' | 'acerca' | 'cv' | null
+  const [zoom, setZoom] = useState(null);         // { lista, i, alt }
 
-  const mostrada = vista ?? seleccion;
-  const o = obra(mostrada);
+  const o = obra(seleccion);
+  const n = o.imagenes?.length ?? 0;
 
   const elegir = useCallback(id => {
-    setSeleccion(id); setVista(null); setImagen(0); setIndiceAbierto(false);
-    window.scrollTo(0, 0);
+    setSeleccion(id); setImagen(0); setAbierta(null);
     try { history.replaceState(null, '', id === INICIO ? location.pathname : '#' + id); } catch {}
   }, []);
 
   useEffect(() => {
-    setConRaton(matchMedia('(hover: hover)').matches);
     const h = location.hash.slice(1);
-    if (obra(h) || h === 'acerca' || h === 'cv') { setSeleccion(h); }
+    if (obra(h)) setSeleccion(h);
+    else if (h === 'acerca' || h === 'cv') setAbierta(h);
   }, []);
 
+  // Con un desplegable abierto, la página de detrás no se mueve
   useEffect(() => {
-    if (!zoom) return;
+    document.body.style.overflow = abierta ? 'hidden' : '';
+  }, [abierta]);
+
+  useEffect(() => {
     const tecla = e => {
-      if (e.key === 'Escape') setZoom(null);
-      const n = zoom.lista.length;
-      if (n > 1 && e.key === 'ArrowLeft') setZoom(z => ({ ...z, i: (z.i - 1 + n) % n }));
-      if (n > 1 && e.key === 'ArrowRight') setZoom(z => ({ ...z, i: (z.i + 1) % n }));
+      if (zoom) {
+        const m = zoom.lista.length;
+        if (e.key === 'Escape') setZoom(null);
+        if (m > 1 && e.key === 'ArrowLeft') setZoom(z => ({ ...z, i: (z.i - 1 + m) % m }));
+        if (m > 1 && e.key === 'ArrowRight') setZoom(z => ({ ...z, i: (z.i + 1) % m }));
+      } else if (e.key === 'Escape') setAbierta(null);
     };
     addEventListener('keydown', tecla);
     return () => removeEventListener('keydown', tecla);
   }, [zoom]);
 
-  const ampliarObra = (ob, i) => setZoom({ lista: ob.imagenes.map(([s]) => s), i, alt: ob.titulo });
   const ampliarAcerca = () => setZoom({ lista: [ACERCA.foto], i: 0, alt: 'Estefanía Viyella' });
-  const pasar = id => { if (indiceAbierto) { setVista(id); setImagen(0); } };
-  const irA = id => { setMenuAbierto(false); document.getElementById('m-' + id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-  const alInicio = e => {
-    e.preventDefault();
-    if (matchMedia('(max-width: 899px)').matches) { setMenuAbierto(false); scrollTo({ top: 0, behavior: 'smooth' }); }
-    else elegir(INICIO);
-  };
+  const alternar = id => setAbierta(a => (a === id ? null : id));
 
   return (
     <>
-      <a className="nombre" href="/" onClick={alInicio}>Estefanía Viyella</a>
+      <a className="nombre" href="/" onClick={e => { e.preventDefault(); elegir(INICIO); }}>Estefanía Viyella</a>
 
-      {/* ───────── Escritorio ───────── */}
-      <main className="escritorio" aria-live="polite">
-        {mostrada === 'cv' ? <CVColumnas /> : (
-          <>
-            <figure className="visor">
-              <div className="visor-imagen">
-                {mostrada === 'acerca' ? (
-                  <Image key="acerca" className="acerca" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella"
-                    width={439} height={659} sizes="25vw" onClick={ampliarAcerca} style={{ height: '36vh', width: 'auto' }} />
-                ) : o.imagenes ? (
-                  <Image key={o.id + imagen} src={'/img/' + o.imagenes[imagen][0]} alt={o.titulo}
-                    width={o.imagenes[imagen][1]} height={o.imagenes[imagen][2]} sizes="(min-width: 900px) 60vw, 100vw"
-                    priority={o.id === INICIO} onClick={() => ampliarObra(o, imagen)}
-                    style={{ height: `min(64vh, calc((70vw - 390px) * ${o.imagenes[imagen][2] / o.imagenes[imagen][1]}))`, width: 'auto' }} />
-                ) : (
-                  <div className="hueco" style={{ aspectRatio: `${o.hueco[0]} / ${o.hueco[1]}` }} />
-                )}
-                <div className="flechas" style={{ visibility: o?.imagenes?.length > 1 ? 'visible' : 'hidden' }}>
-                  {o?.imagenes?.length > 1 && (
-                    <>
-                      <button type="button" aria-label="Imagen anterior" onClick={() => setImagen((imagen - 1 + o.imagenes.length) % o.imagenes.length)}>←</button>
-                      <button type="button" aria-label="Imagen siguiente" onClick={() => setImagen((imagen + 1) % o.imagenes.length)}>→</button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </figure>
-            {mostrada === 'acerca'
-              ? <div className="largo"><p className="texto-largo">{ACERCA.texto}</p></div>
-              : <p className="ficha">{fichaDe(o)}</p>}
-          </>
-        )}
+      {/* ───────── Obra seleccionada ───────── */}
+      <main className="escena" aria-live="polite">
+        <figure className="visor">
+          {o.imagenes ? (
+            <Obra key={o.id + imagen} src={o.imagenes[imagen][0]} w={o.imagenes[imagen][1]} h={o.imagenes[imagen][2]} alt={o.titulo}
+              onClick={() => setZoom({ lista: o.imagenes.map(([s]) => s), i: imagen, alt: o.titulo })} />
+          ) : (
+            <div className="hueco obra-img" style={{ '--r': o.hueco[1] / o.hueco[0], aspectRatio: `${o.hueco[0]} / ${o.hueco[1]}` }} />
+          )}
+          <div className="flechas" style={{ visibility: n > 1 ? 'visible' : 'hidden' }}>
+            <button type="button" aria-label="Imagen anterior" onClick={() => setImagen((imagen - 1 + n) % n)}>←</button>
+            <button type="button" aria-label="Imagen siguiente" onClick={() => setImagen((imagen + 1) % n)}>→</button>
+          </div>
+        </figure>
+        <p className="ficha">{fichaDe(o)}</p>
       </main>
 
-      <aside
-        className={'indice' + (indiceAbierto ? ' abierto' : '')}
-        aria-label="Obras seleccionadas"
-        onClick={() => { if (!indiceAbierto) setIndiceAbierto(true); }}
-        onMouseEnter={conRaton ? () => setIndiceAbierto(true) : undefined}
-        onMouseLeave={conRaton ? () => { setIndiceAbierto(false); setVista(null); } : undefined}
-      >
-        <button type="button" className="indice-flecha" aria-label={indiceAbierto ? 'Cerrar índice' : 'Abrir índice'}
-          onClick={e => { e.stopPropagation(); setIndiceAbierto(!indiceAbierto); }}>
-          {indiceAbierto ? '→' : '←'}
-        </button>
-        <p className="indice-titulo">Obras seleccionadas</p>
-        <div className="indice-lista" onMouseLeave={() => setVista(null)}>
-          <Filas seleccion={seleccion} onElegir={id => indiceAbierto && elegir(id)} onPasar={pasar} />
+      {/* ───────── Menú de franjas, pegado abajo ───────── */}
+      <nav className="menu" aria-label="Menú">
+        <div className="contacto">
+          <span className="etiqueta">Contacto</span>
+          {REDES.map(enlace)}
         </div>
-        <nav className="redes" onClick={e => e.stopPropagation()}>{REDES.map(enlace)}</nav>
-      </aside>
+        {SECCIONES.map(([id, titulo]) => (
+          <button key={id} type="button" className="franja" onClick={() => setAbierta(id)}>
+            <span>{titulo}</span><span aria-hidden="true">+</span>
+          </button>
+        ))}
+      </nav>
 
-      {/* ───────── Móvil ───────── */}
-      <div className="movil">
-        <div className="feed">
-          {OBRAS.map((ob, n) => (
-            <section key={ob.id} className="entrada" id={'m-' + ob.id}>
-              {ob.imagenes ? <Carrusel o={ob} onAmpliar={ampliarObra} arriba={n < 2} /> : (
-                <div className="caja"><div className="hueco" style={{ aspectRatio: `${ob.hueco[0]} / ${ob.hueco[1]}` }} /></div>
+      {/* ───────── Desplegable a pantalla completa ───────── */}
+      {abierta && (
+        <div className="desplegable" role="dialog" aria-modal="true" aria-label={SECCIONES.find(s => s[0] === abierta)[1]}>
+          <button type="button" className="cerrar" onClick={() => setAbierta(null)}>Cerrar <span aria-hidden="true">×</span></button>
+          {SECCIONES.map(([id, titulo]) => (
+            <section key={id} className={'seccion' + (abierta === id ? ' abierta' : '')}>
+              <button type="button" className="franja" aria-expanded={abierta === id} onClick={() => alternar(id)}>
+                <span>{titulo}</span><span aria-hidden="true">{abierta === id ? '−' : '+'}</span>
+              </button>
+              {abierta === id && (
+                <div className="contenido">
+                  {id === 'obras' && <ListaObras seleccion={seleccion} onElegir={elegir} />}
+                  {id === 'acerca' && <Acerca onAmpliar={ampliarAcerca} />}
+                  {id === 'cv' && <CVColumnas />}
+                </div>
               )}
-              <p>{fichaDe(ob)}</p>
             </section>
           ))}
-          <section className="entrada" id="m-acerca">
-            <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={439} height={659} sizes="167px" onClick={ampliarAcerca} />
-            <p>{ACERCA.texto}</p>
-          </section>
-          <section className="entrada" id="m-cv">
-            {Object.entries(CV).map(([t, items], i) => (
-              <div key={t} className="cv-bloque">
-                {i > 0 && <div className="espacio" />}
-                <h3>{t}</h3>
-                {items.map(e => <EntradaCV key={e[0]} e={e} />)}
-              </div>
-            ))}
-          </section>
-          <nav className="pie">
-            {REDES.map(enlace)}
-            <a href="#cv" onClick={e => { e.preventDefault(); irA('cv'); }}>CV</a>
-          </nav>
         </div>
-
-        <div className={'menu-movil' + (menuAbierto ? ' abierto' : '')} aria-label="Obras seleccionadas">
-          <button type="button" className="menu-cabecera" onClick={() => setMenuAbierto(!menuAbierto)}>
-            <span>Obras seleccionadas</span><span className="menu-flecha">{menuAbierto ? '↓' : '↑'}</span>
-          </button>
-          <div className="menu-lista">
-            <Filas seleccion={null} onElegir={irA} />
-            <nav className="redes">
-              {REDES.map(enlace)}
-              <a href="#cv" onClick={e => { e.preventDefault(); irA('cv'); }}>CV</a>
-            </nav>
-          </div>
-        </div>
-        {menuAbierto && <div className="menu-fuera" onClick={() => setMenuAbierto(false)} />}
-      </div>
+      )}
 
       {/* ───────── Imagen ampliada ───────── */}
       {zoom && (
