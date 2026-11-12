@@ -7,13 +7,11 @@
   --grotesk: var(--fuente-grotesk), "Familjen Grotesk", system-ui, sans-serif;
   --puntos-arriba: linear-gradient(to right, var(--tinta) 1px, transparent 1px) 0 0 / 4px 1px repeat-x;
   --puntos-abajo: linear-gradient(to right, var(--tinta) 1px, transparent 1px) 0 100% / 4px 1px repeat-x;
-
-  /* Escritorio: margen lateral, alto del menú plegado (contacto 56 + 3 franjas de 48) y hueco de la obra */
+  --puntos-izquierda: linear-gradient(to bottom, var(--tinta) 1px, transparent 1px) 0 0 / 1px 4px repeat-y;
   --g: 36px;
+  --pestana: 56px;
+  --contacto: 56px;
   --franja: 48px;
-  --alto-menu: calc(56px + 3 * var(--franja));
-  --alto-img: calc(100vh - var(--alto-menu) - 96px - 64px);
-  --ancho-img: calc(70vw - 108px);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,16 +22,31 @@ a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 img { display: block; }
 
+/* Escritorio: las pestañas (y el panel abierto, --panel) ocupan la derecha; la obra se ajusta al hueco que queda */
+.sitio {
+  --lateral: calc(3 * var(--pestana) + var(--panel));
+  --alto-img: calc(100vh - var(--contacto) - 96px - 64px);
+  --ancho-img: calc(100vw - var(--lateral) - 30vw - 108px);
+}
+
+/* Con un panel abierto la obra aprovecha también el lado izquierdo (la ficha queda debajo) */
+.sitio[data-panel] {
+  --alto-img: calc(100vh - var(--contacto) - 96px - 130px);
+  --ancho-img: calc(100vw - var(--lateral) - 72px);
+}
+.sitio[data-panel] .escena { padding-left: var(--g); padding-bottom: 96px; }
+
 .nombre {
   position: fixed; z-index: 30; left: var(--g); top: 40px;
   font-family: var(--grotesk); font-weight: 500; font-size: 18px; text-transform: uppercase;
 }
 
-/* ───────── Obra seleccionada ───────── */
+/* ───────── Obra ───────── */
 .escena {
-  position: fixed; top: 0; left: 0; right: 0; bottom: var(--alto-menu);
+  position: fixed; top: 0; left: 0; right: var(--lateral); bottom: var(--contacto);
   display: flex; align-items: center; justify-content: center;
   padding: 96px var(--g) 24px calc(30vw + 72px);
+  transition: right .35s ease-out;
 }
 .visor { display: inline-flex; flex-direction: column; }
 .obra-img {
@@ -47,38 +60,36 @@ img { display: block; }
   font-size: 14px; line-height: 1.5;
 }
 
-/* ───────── Menú de franjas ───────── */
-.menu { position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; background: var(--menta); }
-.contacto {
-  display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; height: 56px; padding: 0 var(--g);
-}
+/* ───────── Contacto ───────── */
+.contacto { display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; height: var(--contacto); padding: 0 var(--g); }
 .contacto .etiqueta { font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
 .contacto a { font-family: var(--grotesk); font-weight: 500; font-size: 14px; text-transform: uppercase; }
-.franja {
-  display: flex; justify-content: space-between; align-items: center; width: 100%; height: var(--franja);
-  padding: 0 var(--g); background: var(--puntos-arriba);
-  font-weight: 400; font-size: 14px; text-transform: uppercase; letter-spacing: .06em;
+.contacto-escritorio {
+  position: fixed; z-index: 15; left: 0; right: var(--lateral); bottom: 0;
+  background: var(--fondo) var(--puntos-arriba); transition: right .35s ease-out;
 }
-.franja span:last-child { font-size: 18px; font-weight: 300; }
 
-/* ───────── Desplegable a pantalla completa ───────── */
-.desplegable {
-  position: fixed; z-index: 40; inset: 0; background: var(--menta);
-  display: flex; flex-direction: column; animation: subir .35s ease-out;
+/* ───────── Escritorio: pestañas verticales ───────── */
+.lateral { position: fixed; z-index: 20; top: 0; right: 0; bottom: 0; display: flex; background: var(--menta); }
+.pestana {
+  flex: none; width: var(--pestana); height: 100%;
+  display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+  padding: 36px 0 20px; background: var(--puntos-izquierda);
 }
-.cerrar {
-  flex: none; display: flex; justify-content: center; align-items: center; gap: 10px; height: var(--franja);
-  background: var(--tinta); color: var(--fondo); font-size: 14px; text-align: center;
+.pestana.abierta { background: var(--fondo) var(--puntos-izquierda); }
+.pestana-texto { writing-mode: vertical-rl; font-weight: 400; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+.pestana > span:last-child { font-size: 18px; }
+.panel {
+  flex: none; height: 100%; overflow-y: auto; padding: 36px var(--g) 48px;
+  background: var(--fondo) var(--puntos-izquierda); animation: abrir .35s ease-out;
 }
-.seccion { flex: none; display: flex; flex-direction: column; }
-.seccion.abierta { flex: 1; min-height: 0; }
-.seccion.abierta > .franja { background: var(--fondo); }
-.contenido { flex: 1; min-height: 0; overflow-y: auto; padding: 28px var(--g) 48px; background: var(--puntos-arriba); }
-@keyframes subir { from { transform: translateY(24px); opacity: 0; } }
+.panel-obras { width: 480px; }
+.panel-acerca { width: 600px; }
+.panel-cv { width: min(900px, 58vw); }
+@keyframes abrir { from { opacity: 0; transform: translateX(16px); } }
 
-/* Obras */
-.obras { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .8fr); gap: 64px; align-items: start; }
-.cabecera {
+/* ───────── Contenidos (panel en escritorio, desplegable en móvil) ───────── */
+.lista .cabecera {
   display: flex; justify-content: space-between; padding-bottom: 10px; margin-bottom: 4px;
   font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; background: var(--puntos-abajo);
 }
@@ -87,22 +98,19 @@ img { display: block; }
   font-size: 14px; font-weight: 400; background: var(--puntos-abajo);
 }
 .filas li.sel .titulo, .filas li a:hover .titulo { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-.vista-previa { position: sticky; top: 0; display: flex; flex-direction: column; gap: 12px; }
-.vista-previa img, .vista-previa .hueco { max-height: 48vh; width: auto; max-width: 100%; height: auto; }
-.vista-previa .hueco { background: var(--hueco); height: 48vh; }
-.vista-previa p { font-size: 14px; line-height: 1.5; }
 
-/* Acerca */
-.acerca { display: grid; grid-template-columns: 220px minmax(0, 640px); gap: 48px; align-items: start; }
+.acerca { display: flex; flex-direction: column; gap: 28px; }
 .acerca .foto { width: 220px; height: auto; cursor: zoom-in; }
 .acerca p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
 
-/* CV */
-.cv { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 32px; align-items: start; }
+.cv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; align-items: start; }
 .cv-col { display: flex; flex-direction: column; gap: 32px; }
 .cv-bloque { display: flex; flex-direction: column; gap: 18px; }
 .cv h3 { font-weight: 700; font-size: 13px; text-transform: uppercase; }
 .cv p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
+
+/* El menú de franjas y su desplegable solo existen en móvil */
+.menu, .desplegable { display: none; }
 
 /* ───────── Imagen ampliada ───────── */
 .zoom {
@@ -115,26 +123,45 @@ img { display: block; }
 .zoom-flechas { position: absolute; bottom: 20px; right: 24px; display: flex; gap: 8px; font-size: 13px; }
 .zoom-flechas button { padding: 8px; }
 @keyframes aparecer { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .zoom, .desplegable { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .zoom, .desplegable, .panel { animation: none; } .escena, .contacto-escritorio { transition: none; } }
 
-/* ───────── Móvil ───────── */
+/* ───────── Móvil: franjas abajo ───────── */
 @media (max-width: 899px) {
-  :root {
-    --g: 16px;
-    --alto-menu: calc(48px + 3 * var(--franja));
+  :root { --g: 16px; --contacto: 48px; }
+  .sitio {
+    --alto-menu: calc(var(--contacto) + 3 * var(--franja));
     --alto-img: calc(100dvh - var(--alto-menu) - 72px - 110px);
     --ancho-img: calc(100vw - 32px);
   }
+  .lateral, .contacto-escritorio { display: none; }
   .nombre { top: 24px; font-size: 16px; }
-  .escena { flex-direction: column; padding: 72px var(--g) 16px; }
+  .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; padding: 72px var(--g) 16px; }
   .ficha { position: static; width: 100%; margin-top: 8px; }
-  .contacto { grid-template-columns: auto auto 1fr; gap: 20px; height: 48px; }
-  .contacto a:last-child { justify-self: start; }
-  .obras { grid-template-columns: 1fr; }
-  .vista-previa { display: none; }
-  .acerca { grid-template-columns: 1fr; gap: 24px; }
+
+  .menu { display: block; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; background: var(--menta); }
+  .contacto { grid-template-columns: auto auto 1fr; gap: 20px; }
+  .franja {
+    display: flex; justify-content: space-between; align-items: center; width: 100%; height: var(--franja);
+    padding: 0 var(--g); background: var(--puntos-arriba);
+    font-weight: 400; font-size: 14px; text-transform: uppercase; letter-spacing: .06em;
+  }
+  .franja span:last-child { font-size: 18px; font-weight: 300; }
+
+  .desplegable {
+    display: flex; flex-direction: column; position: fixed; z-index: 40; inset: 0; background: var(--menta);
+    animation: subir .35s ease-out;
+  }
+  .cerrar {
+    flex: none; display: flex; justify-content: center; align-items: center; gap: 10px; height: var(--franja);
+    background: var(--tinta); color: var(--fondo); font-size: 14px; text-align: center;
+  }
+  .seccion { flex: none; display: flex; flex-direction: column; }
+  .seccion.abierta { flex: 1; min-height: 0; }
+  .seccion.abierta > .franja { background: var(--fondo); }
+  .contenido { flex: 1; min-height: 0; overflow-y: auto; padding: 28px var(--g) 48px; background: var(--puntos-arriba); }
   .acerca .foto { width: 167px; }
   .cv { grid-template-columns: 1fr; }
   .cv-col { gap: 24px; }
-  .cv-sigue .cv-bloque h3 { display: none; }
+  .cv-col + .cv-col { margin-top: 24px; }
 }
+@keyframes subir { from { transform: translateY(24px); opacity: 0; } }
