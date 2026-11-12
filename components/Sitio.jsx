@@ -45,6 +45,7 @@ function Acerca({ onAmpliar }) {
     <div className="acerca">
       <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={439} height={659} sizes="220px" onClick={onAmpliar} />
       <p>{ACERCA.texto}</p>
+      <nav className="redes">{REDES.map(enlace)}</nav>
     </div>
   );
 }
@@ -146,7 +147,7 @@ export default function Sitio() {
         <p className="ficha">{fichaDe(o)}</p>
       </main>
 
-      {/* ───────── Escritorio: pestañas verticales a la derecha y contacto abajo ───────── */}
+      {/* ───────── Escritorio: pestañas verticales a la derecha ───────── */}
       <aside className="lateral" aria-label="Menú">
         {SECCIONES.map(([id, titulo]) => (
           <Fragment key={id}>
@@ -157,22 +158,15 @@ export default function Sitio() {
           </Fragment>
         ))}
       </aside>
-      <div className="contacto contacto-escritorio">
-        <span className="etiqueta">Contacto</span>
-        {REDES.map(enlace)}
-      </div>
 
       {/* ───────── Móvil: franjas abajo que se despliegan a pantalla completa ───────── */}
       <nav className="menu" aria-label="Menú">
-        <div className="contacto">
-          <span className="etiqueta">Contacto</span>
-          {REDES.map(enlace)}
-        </div>
         {SECCIONES.map(([id, titulo]) => (
           <button key={id} type="button" className="franja" onClick={() => setAbierta(id)}>
             <span>{titulo}</span><span aria-hidden="true">+</span>
           </button>
         ))}
+        <div className="pie-movil">{REDES.map(enlace)}</div>
       </nav>
       {abierta && movil && (
         <div className="desplegable" role="dialog" aria-modal="true" aria-label={SECCIONES.find(s => s[0] === abierta)[1]}>
