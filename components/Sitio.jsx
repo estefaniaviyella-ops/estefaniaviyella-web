@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { OBRAS, ACERCA, CV, REDES } from '../lib/contenido';
 
@@ -77,6 +77,7 @@ export default function Sitio() {
   const [zoom, setZoom] = useState(null);         // { lista, i, alt }
   const [movil, setMovil] = useState(false);
   const [ultima, setUltima] = useState('obras');  // sección que se ve mientras el desplegable móvil baja al cerrarse
+  const toque = useRef(null);                      // x donde empezó el dedo, para el swipe entre fotos
 
   const mostrada = vista ?? seleccion;
   const o = obra(mostrada);
@@ -134,7 +135,15 @@ export default function Sitio() {
 
       {/* ───────── Obra ───────── */}
       <main className="escena" aria-live="polite">
-        <figure className="visor">
+        {/* deslizar el dedo a izquierda o derecha pasa a la foto siguiente o anterior */}
+        <figure className="visor"
+          onTouchStart={e => { toque.current = e.touches[0].clientX; }}
+          onTouchEnd={e => {
+            const x0 = toque.current; toque.current = null;
+            if (x0 == null || n < 2) return;
+            const dx = e.changedTouches[0].clientX - x0;
+            if (Math.abs(dx) > 40) setImagen(i => (i + (dx < 0 ? 1 : -1) + n) % n);
+          }}>
           {o.imagenes ? (
             <Obra key={o.id + idx} src={o.imagenes[idx][0]} w={o.imagenes[idx][1]} h={o.imagenes[idx][2]} alt={o.titulo}
               onClick={() => setZoom({ lista: o.imagenes.map(([s]) => s), i: idx, alt: o.titulo })} />
