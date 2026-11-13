@@ -42,8 +42,9 @@ img { display: block; }
 /* ───────── Obra ───────── */
 .escena {
   position: fixed; top: 0; left: 0; right: var(--lateral); bottom: var(--contacto);
-  display: flex; align-items: center; justify-content: center;
-  padding: 96px var(--g) 24px calc(30vw + 72px);
+  /* la obra a la izquierda; a la derecha queda sitio para la ficha */
+  display: flex; align-items: center; justify-content: flex-start;
+  padding: 96px calc(30vw + 72px) 24px var(--g);
   transition: right var(--tiempo) var(--suave), padding var(--tiempo) var(--suave);
 }
 .visor { display: inline-flex; flex-direction: column; }
@@ -54,7 +55,7 @@ img { display: block; }
 .visor .hueco { background: var(--hueco); cursor: default; }
 .visor .flechas { align-self: flex-end; display: flex; gap: 12px; margin-top: 10px; font-size: 12px; min-height: 18px; }
 .ficha {
-  position: absolute; left: var(--g); bottom: 36px; width: min(640px, 30vw);
+  position: absolute; right: var(--g); bottom: 36px; width: min(640px, 30vw);
   font-size: 14px; line-height: 1.5;
 }
 
