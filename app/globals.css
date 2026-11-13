@@ -56,7 +56,8 @@ img { display: block; }
 /* fotos que se descargan en segundo plano: ocupan 1px y no se ven */
 .precarga { position: fixed; left: 0; bottom: 0; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
 /* flechas siempre en el mismo sitio: esquina de abajo a la izquierda */
-.visor .flechas { position: absolute; left: 17vw; bottom: 22px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
+.visor .flechas { position: absolute; left: 17vw; bottom: 22px; display: flex; align-items: center; gap: 12px; font-size: 12px; min-height: 18px; }
+.visor .flechas .aviso { font-family: var(--grotesk); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; opacity: .55; }
 .ficha {
   position: absolute; z-index: 5; right: var(--g); bottom: 24px; width: min(640px, 30vw);
   font-size: 14.5px; line-height: 1.375; white-space: pre-line;
@@ -64,14 +65,6 @@ img { display: block; }
 
 
 /* flechas grandes a los lados: pasan de una obra a otra */
-.paso {
-  position: fixed; z-index: 25; top: 50%; transform: translateY(-50%);
-  padding: 20px 14px; font-size: 30px; line-height: 1; color: var(--tinta); opacity: .45;
-  transition: opacity .25s ease, right var(--tiempo) var(--suave);
-}
-.paso:hover { opacity: 1; }
-.paso.anterior { left: 2px; }
-.paso.siguiente { right: calc(var(--lateral) + 2px); }
 
 /* ───────── Escritorio: pestañas verticales ───────── */
 .lateral { position: fixed; z-index: 20; top: 0; right: 0; bottom: 0; display: flex; background: var(--menta); }
@@ -163,8 +156,6 @@ img { display: block; }
   .visor .flechas { left: auto; }
   .ficha { text-align: center; }
   .ficha { position: static; width: 100%; margin-top: auto; padding-top: 10px; }
-  .paso { top: calc((100dvh - var(--alto-menu)) / 2); padding: 18px 10px; font-size: 26px; opacity: .55; }
-  .paso.siguiente { right: 2px; }
   .visor .flechas { position: static; align-self: center; margin-top: 10px; gap: 24px; }
   .visor .flechas button { padding: 6px 10px; }   /* más fácil de tocar */
   .visor { touch-action: pan-y; }
