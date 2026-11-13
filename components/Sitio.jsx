@@ -18,7 +18,7 @@ const EntradaCV = ({ e: [t, l, a] }) => <p>{`${t}\n${l}\n${a}`}</p>;
 // Imagen de una obra a la medida del hueco libre (el CSS fija el alto con --alto-img y --ancho-img)
 function Obra({ src, w, h, alt, onClick }) {
   return (
-    <Image src={'/img/' + src} alt={alt} width={w} height={h} sizes="(min-width: 900px) 60vw, 100vw" priority
+    <Image src={'/img/' + src} alt={alt} width={w} height={h} sizes="(min-width: 900px) 75vw, 100vw" quality={92} priority
       onClick={onClick} className="obra-img" style={{ '--r': h / w }} />
   );
 }
@@ -43,7 +43,7 @@ function Acerca({ onAmpliar }) {
   return (
     <div className="acerca">
       <p>{ACERCA.texto}</p>
-      <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={1171} height={1500} sizes="170px" onClick={onAmpliar} />
+      <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={1171} height={1500} sizes="340px" quality={92} onClick={onAmpliar} />
       <nav className="redes">{REDES.map(enlace)}</nav>
     </div>
   );
@@ -207,7 +207,7 @@ export default function Sitio() {
             if (Math.abs(dx) > 40) { deslizo.current = true; setZoom(z => ({ ...z, i: (z.i + (dx < 0 ? 1 : -1) + m) % m })); }
           }}>
           <div className="zoom-imagen">
-            <Image src={'/img/' + zoom.lista[zoom.i]} alt={zoom.alt} fill sizes="100vw" quality={90} style={{ objectFit: 'contain' }}
+            <Image src={'/img/' + zoom.lista[zoom.i]} alt={zoom.alt} fill sizes="100vw" quality={96} style={{ objectFit: 'contain' }}
               className={zoom.lista[zoom.i] === ACERCA.foto ? 'foto-suave' : undefined} />
           </div>
           <button type="button" className="zoom-cerrar" aria-label="Cerrar" autoFocus>Cerrar</button>
