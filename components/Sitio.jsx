@@ -26,7 +26,6 @@ function Obra({ src, w, h, alt, onClick }) {
 function ListaObras({ seleccion, onElegir, onPasar }) {
   return (
     <div className="lista">
-      <div className="cabecera"><span>Título</span><span>Año</span></div>
       <ul className="filas" onMouseLeave={onPasar && (() => onPasar(null))}>
         {OBRAS.map(ob => (
           <li key={ob.id} className={ob.id === seleccion ? 'sel' : undefined} onMouseEnter={onPasar && (() => onPasar(ob.id))}>
