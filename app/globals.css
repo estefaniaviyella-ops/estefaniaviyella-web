@@ -1,6 +1,6 @@
 :root {
   --fondo: #F1F0EC;
-  --menta: #DCEFE7;
+  --menta: #EFE8D3;
   --tinta: #3A3A38;
   --hueco: #DEDBD2;
   --mono: var(--fuente-mono), "Chivo Mono", ui-monospace, monospace;
@@ -36,7 +36,8 @@ img { display: block; }
   --alto-img: calc(100vh - var(--contacto) - 96px - 130px);
   --ancho-img: calc(100vw - var(--lateral) - 72px);
 }
-.sitio[data-panel] .escena { padding-left: var(--g); padding-bottom: 96px; }
+/* la obra se queda pegada al menú: crece y encoge desde su borde derecho */
+.sitio[data-panel] .escena { padding-left: var(--g); padding-bottom: 96px; justify-content: flex-end; }
 
 .nombre {
   position: fixed; z-index: 30; left: var(--g); top: 40px;
