@@ -30,8 +30,8 @@ img { display: block; }
 /* Escritorio: las pestañas ocupan la derecha; la obra no se mueve y el panel abierto la tapa por encima */
 .sitio {
   --lateral: calc(3 * var(--pestana));
-  --alto-img: calc(100vh - var(--contacto) - 24px - 52px);
-  --ancho-img: calc(100vw - var(--lateral));
+  --alto-img: calc(100vh - var(--contacto) - 52px);
+  --ancho-img: calc(100vw - var(--lateral) - 17vw);
 }
 
 .nombre {
@@ -43,8 +43,8 @@ img { display: block; }
 .escena {
   position: fixed; top: 0; left: 0; right: var(--lateral); bottom: var(--contacto);
   /* la obra a la izquierda; a la derecha queda sitio para la ficha */
-  display: flex; align-items: center; justify-content: flex-start;
-  padding: 24px 0 52px 0;   /* la obra ocupa de borde a borde: pasa por detrás del nombre y de la ficha */
+  display: flex; align-items: flex-start; justify-content: flex-start;
+  padding: 0 0 52px 17vw;   /* la obra arranca arriba del todo, algo hacia la derecha */
   transition: right var(--tiempo) var(--suave), padding var(--tiempo) var(--suave);
 }
 .visor { display: inline-flex; flex-direction: column; }
@@ -56,7 +56,7 @@ img { display: block; }
 /* fotos que se descargan en segundo plano: ocupan 1px y no se ven */
 .precarga { position: fixed; left: 0; bottom: 0; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
 /* flechas siempre en el mismo sitio: esquina de abajo a la izquierda */
-.visor .flechas { position: absolute; left: var(--g); bottom: 22px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
+.visor .flechas { position: absolute; left: 17vw; bottom: 22px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
 .ficha {
   position: absolute; z-index: 5; right: var(--g); bottom: 24px; width: min(640px, 30vw);
   font-size: 14.5px; line-height: 1.375;
