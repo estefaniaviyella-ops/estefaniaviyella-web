@@ -44,7 +44,7 @@ img { display: block; }
   position: fixed; top: 0; left: 0; right: var(--lateral); bottom: var(--contacto);
   /* la obra a la izquierda; a la derecha queda sitio para la ficha */
   display: flex; align-items: center; justify-content: flex-start;
-  padding: 96px calc(30vw + 72px) 24px var(--g);
+  padding: 96px calc(30vw + 72px) 64px var(--g);
   transition: right var(--tiempo) var(--suave), padding var(--tiempo) var(--suave);
 }
 .visor { display: inline-flex; flex-direction: column; }
@@ -53,7 +53,8 @@ img { display: block; }
   width: auto; max-width: var(--ancho-img); cursor: zoom-in;
 }
 .visor .hueco { background: var(--hueco); cursor: default; }
-.visor .flechas { align-self: flex-end; display: flex; gap: 12px; margin-top: 10px; font-size: 12px; min-height: 18px; }
+/* flechas siempre en el mismo sitio: esquina de abajo a la izquierda */
+.visor .flechas { position: absolute; left: var(--g); bottom: 30px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
 .ficha {
   position: absolute; right: var(--g); bottom: 36px; width: min(640px, 30vw);
   font-size: 14px; line-height: 1.5;
@@ -132,6 +133,7 @@ img { display: block; }
   .nombre { top: 24px; font-size: 16px; }
   .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; padding: 72px var(--g) 16px; }
   .ficha { position: static; width: 100%; margin-top: 8px; }
+  .visor .flechas { position: static; align-self: flex-end; margin-top: 10px; }
 
   .menu { display: block; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; background: var(--menta); }
   .franja {
