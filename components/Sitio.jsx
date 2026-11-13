@@ -183,7 +183,8 @@ export default function Sitio() {
               <button type="button" className="franja" aria-expanded={abierta === id} onClick={() => alternar(id)}>
                 <span>{titulo}</span><span aria-hidden="true">{(abierta ?? ultima) === id ? '−' : '+'}</span>
               </button>
-              {(abierta ?? ultima) === id && <div className="contenido">{contenido(id)}</div>}
+              {/* todas montadas: abrir una sección es animar su alto */}
+              <div className="contenido" inert={(abierta ?? ultima) !== id}>{contenido(id)}</div>
             </section>
           ))}
         </div>
