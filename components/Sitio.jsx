@@ -218,7 +218,6 @@ export default function Sitio() {
             </div>
           </section>
         ))}
-        <div className="pie-movil">{REDES.map(enlace)}</div>
       </nav>
       {/* velo sobre la página: al hacer clic o tocar fuera del menú, se cierra (en móvil además oscurece un poco) */}
       <div className={'velo' + (abierta ? ' abierto' : '')} aria-hidden="true" onClick={() => setAbierta(null)} />
