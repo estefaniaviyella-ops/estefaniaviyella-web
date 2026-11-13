@@ -141,11 +141,11 @@ img { display: block; }
   .lateral { display: none; }
   .nombre { top: 24px; font-size: 15px; }
   /* en móvil todo va centrado: la obra, las flechas y la ficha */
-  .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; align-items: center; justify-content: center; padding: 0 8px 28px; }   /* un poco de aire entre la ficha y el menú */
+  .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; align-items: center; justify-content: flex-start; padding: 0 8px 28px; }   /* un poco de aire entre la ficha y el menú */
   .visor { align-items: center; }
   .visor .flechas { left: auto; }
   .ficha { text-align: center; }
-  .ficha { position: static; width: 100%; margin-top: 8px; }
+  .ficha { position: static; width: 100%; margin-top: auto; padding-top: 10px; }
   .visor .flechas { position: static; align-self: center; margin-top: 10px; gap: 24px; }
   .visor .flechas button { padding: 6px 10px; }   /* más fácil de tocar */
   .visor { touch-action: pan-y; }
