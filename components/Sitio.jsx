@@ -2,7 +2,7 @@
 
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { OBRAS, ACERCA, CV, REDES } from '../lib/contenido';
+import { OBRAS, SECCIONES_OBRA, ACERCA, CV, REDES } from '../lib/contenido';
 
 const INICIO = OBRAS[0].id;
 const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV']];
@@ -45,18 +45,24 @@ function Precarga({ obra: o }) {
   );
 }
 
-function ListaObras({ seleccion, onElegir, onPasar }) {
+function ListaObras({ seleccion, onElegir }) {
+  const grupos = SECCIONES_OBRA.map(s => [s, OBRAS.filter(o => o.seccion === s)]).filter(([, o]) => o.length);
   return (
     <div className="lista">
-      <ul className="filas" onMouseLeave={onPasar && (() => onPasar(null))}>
-        {OBRAS.map(ob => (
-          <li key={ob.id} className={ob.id === seleccion ? 'sel' : undefined} onMouseEnter={onPasar && (() => onPasar(ob.id))}>
-            <a href={'#' + ob.id} onClick={e => { e.preventDefault(); onElegir(ob.id); }}>
-              <span className="titulo">({ob.titulo})</span><span>{ob.año}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
+      {grupos.map(([seccion, obras]) => (
+        <div key={seccion} className="grupo">
+          <h3>{seccion}</h3>
+          <ul className="filas">
+            {obras.map(ob => (
+              <li key={ob.id} className={ob.id === seleccion ? 'sel' : undefined}>
+                <a href={'#' + ob.id} onClick={e => { e.preventDefault(); onElegir(ob.id); }}>
+                  <span className="titulo">({ob.titulo})</span><span>{ob.año}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 }
