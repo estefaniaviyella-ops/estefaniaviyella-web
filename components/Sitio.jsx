@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useId, useRef, useState } from 'react';
 import Image from 'next/image';
 import { OBRAS, ACERCA, CV, REDES } from '../lib/contenido';
 
@@ -8,7 +8,9 @@ const INICIO = OBRAS[0].id;
 const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV'], ['contacto', 'Contacto']];
 // Ancho de cada panel lateral en escritorio
 const ANCHO_PANEL = { obras: '620px', acerca: '740px', cv: 'min(1040px, 66vw)', contacto: '620px' };
-const MOTIVOS = ['Catálogo de obras disponibles', 'Encargo', 'Otro'];
+const FRASE_CINTA = 'PREGÚNTAME POR OBRAS DISPONIBLES ✦ ';
+const REPETICIONES = 8;
+const MENSAJE_OBRAS = '¡Hola, Estefanía! Vengo a curiosear: ¿qué obras tienes disponibles? Me encantaría ver el catálogo.';
 const CORREO = REDES.find(([, url]) => url.startsWith('mailto:'))[1].slice(7);
 const fichaDe = o => `(${o.titulo}). ${o.año}.${o.ficha ? ' ' + o.ficha : ''}`;
 const obra = id => OBRAS.find(o => o.id === id);
@@ -51,34 +53,56 @@ function Acerca({ onAmpliar }) {
   );
 }
 
+// Cinta curva que corre en bucle; al pasar el ratón (o tocarla) se para y rellena el mensaje
+function Cinta({ onPedir }) {
+  const id = 'cinta' + useId().replace(/[^a-zA-Z0-9]/g, '');
+  const texto = useRef(null);
+  const quieta = useRef(false);
+  useEffect(() => {
+    const t = texto.current;
+    if (!t || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const vuelta = t.getComputedTextLength() / REPETICIONES;   // largo de una frase
+    let x = 0, raf;
+    const paso = () => {
+      if (!quieta.current) { x -= 0.6; if (x <= -vuelta) x += vuelta; t.firstChild.setAttribute('startOffset', x); }
+      raf = requestAnimationFrame(paso);
+    };
+    raf = requestAnimationFrame(paso);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return (
+    <svg className="cinta" viewBox="0 0 640 300" aria-hidden="true">
+      <path id={id} d="M -60 240 C 140 0, 380 340, 700 60" fill="none" />
+      <g className="cinta-banda" onMouseEnter={() => { quieta.current = true; onPedir(); }}
+        onMouseLeave={() => { quieta.current = false; }} onClick={onPedir}>
+        <use href={'#' + id} className="cinta-fondo" />
+        <text ref={texto} dy="9"><textPath href={'#' + id}>{FRASE_CINTA.repeat(REPETICIONES)}</textPath></text>
+      </g>
+    </svg>
+  );
+}
+
 // Formulario de contacto: al enviar abre el correo de quien escribe con el mensaje ya preparado
 function Contacto() {
-  const [motivo, setMotivo] = useState(MOTIVOS[0]);
-  const mensaje = useRef(null);
+  const [mensaje, setMensaje] = useState('');
+  const pedir = () => setMensaje(m => (m.trim() && m !== MENSAJE_OBRAS ? m : MENSAJE_OBRAS));
   const enviar = e => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
-    const asunto = `${motivo} · ${f.get('nombre')}`;
-    const cuerpo = `${f.get('mensaje')}\n\n${f.get('nombre')}\n${f.get('email')}`;
+    const tema = mensaje === MENSAJE_OBRAS ? 'Obras disponibles' : 'Contacto desde la web';
+    const asunto = `${tema} · ${f.get('nombre')}`;
+    const cuerpo = `${mensaje}\n\n${f.get('nombre')}\n${f.get('email')}`;
     location.href = `mailto:${CORREO}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
   };
   return (
     <div className="contacto">
-      <button type="button" className="banda" onClick={() => { setMotivo(MOTIVOS[0]); mensaje.current?.focus(); }}>
-        <span>Escríbeme para recibir el catálogo de obras disponibles</span><span aria-hidden="true">→</span>
-      </button>
       <form onSubmit={enviar}>
-        <fieldset className="motivos">
-          <legend>Motivo</legend>
-          {MOTIVOS.map(m => (
-            <label key={m}><input type="radio" name="motivo" checked={motivo === m} onChange={() => setMotivo(m)} /> {m}</label>
-          ))}
-        </fieldset>
         <label>Nombre<input name="nombre" required autoComplete="name" /></label>
         <label>Email<input name="email" type="email" required autoComplete="email" /></label>
-        <label>Mensaje<textarea ref={mensaje} name="mensaje" rows={5} /></label>
+        <label>Mensaje<textarea name="mensaje" rows={5} value={mensaje} onChange={e => setMensaje(e.target.value)} /></label>
         <button type="submit" className="enviar">Enviar</button>
       </form>
+      <Cinta onPedir={pedir} />
     </div>
   );
 }
