@@ -134,7 +134,7 @@ img { display: block; }
 @media (max-width: 899px) {
   :root { --g: 16px; }
   .sitio {
-    --alto-menu: calc(4 * var(--franja));   /* tres franjas + pie con Instagram y Email */
+    --alto-menu: calc(3 * var(--franja));   /* las tres franjas del menú */
     --alto-img: calc(100dvh - var(--alto-menu) - 108px);
     --ancho-img: calc(100vw - 16px);
   }
@@ -158,8 +158,6 @@ img { display: block; }
     transition: background-color .3s ease;
   }
   .franja span:last-child { font-size: 18px; font-weight: 300; }
-  .pie-movil { display: flex; align-items: center; gap: 24px; height: var(--franja); padding: 0 var(--g); background: var(--puntos-arriba); }
-  .pie-movil a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; letter-spacing: .04em; padding: 12px 0; }
 
   /* acordeón: el contenido de la franja abierta crece hacia arriba y empuja las franjas de encima */
   .seccion .contenido {
