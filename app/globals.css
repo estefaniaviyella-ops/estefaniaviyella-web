@@ -12,6 +12,8 @@
   --pestana: 56px;
   --contacto: 0px;
   --franja: 48px;
+  --suave: cubic-bezier(.22, 1, .36, 1);
+  --tiempo: .5s;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -46,7 +48,7 @@ img { display: block; }
   position: fixed; top: 0; left: 0; right: var(--lateral); bottom: var(--contacto);
   display: flex; align-items: center; justify-content: center;
   padding: 96px var(--g) 24px calc(30vw + 72px);
-  transition: right .35s ease-out;
+  transition: right var(--tiempo) var(--suave), padding var(--tiempo) var(--suave);
 }
 .visor { display: inline-flex; flex-direction: column; }
 .obra-img {
@@ -72,13 +74,15 @@ img { display: block; }
 .pestana-texto { writing-mode: vertical-rl; font-weight: 400; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
 .pestana > span:last-child { font-size: 18px; }
 .panel {
-  flex: none; height: 100%; overflow-y: auto; padding: 36px var(--g) 48px;
-  background: var(--fondo) var(--puntos-izquierda); animation: abrir .35s ease-out;
+  flex: none; height: 100%; width: 0; overflow: hidden;
+  background: var(--fondo) var(--puntos-izquierda);
+  transition: width var(--tiempo) var(--suave);
 }
-.panel-obras { width: 480px; }
-.panel-acerca { width: 600px; }
-.panel-cv { width: min(900px, 58vw); }
-@keyframes abrir { from { opacity: 0; transform: translateX(16px); } }
+.panel-interior { height: 100%; overflow-y: auto; padding: 36px var(--g) 48px; opacity: 0; transition: opacity .3s ease; }
+.panel.abierto .panel-interior { opacity: 1; transition: opacity .4s ease .12s; }
+.panel-obras .panel-interior, .panel-obras.abierto { width: 480px; }
+.panel-acerca .panel-interior, .panel-acerca.abierto { width: 600px; }
+.panel-cv .panel-interior, .panel-cv.abierto { width: min(900px, 58vw); }
 
 /* ───────── Contenidos (panel en escritorio, desplegable en móvil) ───────── */
 .lista .cabecera {
@@ -117,7 +121,7 @@ img { display: block; }
 .zoom-flechas { position: absolute; bottom: 20px; right: 24px; display: flex; gap: 8px; font-size: 13px; }
 .zoom-flechas button { padding: 8px; }
 @keyframes aparecer { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .zoom, .desplegable, .panel { animation: none; } .escena { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .zoom { animation: none; } .escena, .panel, .panel-interior, .desplegable { transition: none !important; } }
 
 /* ───────── Móvil: franjas abajo ───────── */
 @media (max-width: 899px) {
@@ -144,8 +148,10 @@ img { display: block; }
 
   .desplegable {
     display: flex; flex-direction: column; position: fixed; z-index: 40; inset: 0; background: var(--menta);
-    animation: subir .35s ease-out;
+    transform: translateY(100%); visibility: hidden;
+    transition: transform var(--tiempo) var(--suave), visibility 0s linear var(--tiempo);
   }
+  .desplegable.abierto { transform: none; visibility: visible; transition: transform var(--tiempo) var(--suave), visibility 0s; }
   .cerrar {
     flex: none; display: flex; justify-content: center; align-items: center; gap: 10px; height: var(--franja);
     background: var(--tinta); color: var(--fondo); font-size: 14px; text-align: center;
@@ -159,4 +165,3 @@ img { display: block; }
   .cv-col { gap: 24px; }
   .cv-col + .cv-col { margin-top: 24px; }
 }
-@keyframes subir { from { transform: translateY(24px); opacity: 0; } }
