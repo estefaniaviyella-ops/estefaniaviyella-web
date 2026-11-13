@@ -1,17 +1,17 @@
 :root {
   --fondo: #F1F0EC;
   --abierto: #FFFFFF;              /* pestaña y panel abiertos */
-  --linea: rgba(58, 58, 56, .2);    /* líneas finas, suaves */
-  --menta: #EFE8D3;
-  --tinta: #3A3A38;
+  --linea: #262626;                 /* línea de puntos */
+  --menta: #F2E297;                 /* amarillo del menú */
+  --tinta: #262626;
   --hueco: #DEDBD2;
-  --mono: var(--fuente-mono), "Chivo Mono", ui-monospace, monospace;
-  --grotesk: var(--fuente-grotesk), "Familjen Grotesk", system-ui, sans-serif;
-  /* líneas finas continuas (arriba, abajo, izquierda) */
-  --puntos-arriba: linear-gradient(var(--linea), var(--linea)) 0 0 / 100% 1px no-repeat;
-  --puntos-abajo: linear-gradient(var(--linea), var(--linea)) 0 100% / 100% 1px no-repeat;
-  --puntos-izquierda: linear-gradient(var(--linea), var(--linea)) 0 0 / 1px 100% no-repeat;
-  --g: 36px;
+  --mono: var(--fuente-mono), "DM Mono", ui-monospace, monospace;
+  --grotesk: var(--fuente-grotesk), "Inter Tight", system-ui, sans-serif;
+  /* línea de puntos de 1px (arriba, abajo, izquierda) */
+  --puntos-arriba: linear-gradient(to right, var(--linea) 1px, transparent 1px) 0 0 / 2px 1px repeat-x;
+  --puntos-abajo: linear-gradient(to right, var(--linea) 1px, transparent 1px) 0 100% / 2px 1px repeat-x;
+  --puntos-izquierda: linear-gradient(to bottom, var(--linea) 1px, transparent 1px) 0 0 / 1px 2px repeat-y;
+  --g: 24px;                        /* margen general, como la referencia */
   --pestana: 56px;
   --contacto: 0px;
   --franja: 48px;
@@ -29,14 +29,14 @@ img { display: block; }
 
 /* Escritorio: las pestañas ocupan la derecha; la obra no se mueve y el panel abierto la tapa por encima */
 .sitio {
-  --lateral: calc(4 * var(--pestana));
-  --alto-img: calc(100vh - var(--contacto) - 96px - 64px);
-  --ancho-img: calc(100vw - var(--lateral) - 30vw - 108px);
+  --lateral: calc(3 * var(--pestana));
+  --alto-img: calc(100vh - var(--contacto) - 72px - 56px);
+  --ancho-img: calc(100vw - var(--lateral) - 30vw - 72px);
 }
 
 .nombre {
-  position: fixed; z-index: 30; left: var(--g); top: 40px;
-  font-family: var(--grotesk); font-weight: 500; font-size: 18px; text-transform: uppercase;
+  position: fixed; z-index: 30; left: var(--g); top: 24px;
+  font-family: var(--grotesk); font-weight: 500; font-size: 15px; text-transform: uppercase;
 }
 
 /* ───────── Obra ───────── */
@@ -44,7 +44,7 @@ img { display: block; }
   position: fixed; top: 0; left: 0; right: var(--lateral); bottom: var(--contacto);
   /* la obra a la izquierda; a la derecha queda sitio para la ficha */
   display: flex; align-items: center; justify-content: flex-start;
-  padding: 96px calc(30vw + 72px) 64px var(--g);
+  padding: 72px calc(30vw + 48px) 56px var(--g);
   transition: right var(--tiempo) var(--suave), padding var(--tiempo) var(--suave);
 }
 .visor { display: inline-flex; flex-direction: column; }
@@ -54,10 +54,10 @@ img { display: block; }
 }
 .visor .hueco { background: var(--hueco); cursor: default; }
 /* flechas siempre en el mismo sitio: esquina de abajo a la izquierda */
-.visor .flechas { position: absolute; left: var(--g); bottom: 30px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
+.visor .flechas { position: absolute; left: var(--g); bottom: 22px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
 .ficha {
-  position: absolute; right: var(--g); bottom: 36px; width: min(640px, 30vw);
-  font-size: 14px; line-height: 1.5;
+  position: absolute; right: var(--g); bottom: 24px; width: min(640px, 30vw);
+  font-size: 14.5px; line-height: 1.375;
 }
 
 
@@ -66,23 +66,22 @@ img { display: block; }
 .pestana {
   flex: none; width: var(--pestana); height: 100%;
   display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-  padding: 36px 0 20px; background: var(--puntos-izquierda);
+  padding: 24px 0 20px; background: var(--puntos-izquierda);
 }
 .pestana.abierta { background: var(--abierto) var(--puntos-izquierda); }
-.pestana-texto { writing-mode: vertical-rl; font-weight: 400; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+.pestana-texto { writing-mode: vertical-rl; font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; }
 .pestana > span:last-child { font-size: 18px; }
 .panel {
   flex: none; height: 100%; width: 0; overflow: hidden;
   background: var(--abierto);   /* sin línea: pestaña y panel abiertos son un solo bloque */
   transition: width var(--tiempo) var(--suave);
 }
-.panel-interior { height: 100%; overflow-y: auto; padding: 36px var(--g) 48px; opacity: 0; transition: opacity .3s ease; }
+.panel-interior { height: 100%; overflow-y: auto; padding: 24px var(--g) 40px; opacity: 0; transition: opacity .3s ease; }
 .panel.abierto .panel-interior { opacity: 1; transition: opacity .4s ease .12s; }
 .panel-obras .panel-interior, .panel-obras.abierto { width: 620px; }
 .panel-acerca .panel-interior, .panel-acerca.abierto { width: 740px; }
-.panel-contacto .panel-interior { padding-bottom: 14px; }   /* Instagram y Email a la altura del − */
+.panel-acerca .panel-interior { padding-bottom: 14px; }   /* Instagram y Email a la altura del − */
 .panel-cv .panel-interior, .panel-cv.abierto { width: min(1040px, 66vw); }
-.panel-contacto .panel-interior, .panel-contacto.abierto { width: 620px; }
 
 /* ───────── Contenidos (panel en escritorio, desplegable en móvil) ───────── */
 .lista .cabecera {
@@ -90,22 +89,22 @@ img { display: block; }
   font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; background: var(--puntos-abajo);
 }
 .filas li a {
-  display: flex; justify-content: space-between; align-items: center; height: 40px;
-  font-size: 14px; font-weight: 400; background: var(--puntos-abajo);
+  display: flex; justify-content: space-between; align-items: baseline; padding: 0 0 4px; line-height: 20px; margin-top: 4px;   /* filas compactas como la referencia */
+  font-size: 14.5px; font-weight: 300; background: var(--puntos-abajo);
 }
 .filas li.sel .titulo, .filas li a:hover .titulo { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
-.acerca { display: flex; flex-direction: column; gap: 28px; }
+.acerca { display: flex; flex-direction: column; gap: 20px; min-height: 100%; }
 .acerca .foto { width: 220px; height: auto; cursor: zoom-in; }
-.acerca p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
+.acerca p { font-size: 14.5px; line-height: 1.375; white-space: pre-line; }
 .redes { display: flex; gap: 24px; margin-top: auto; }   /* Instagram y Email al fondo del panel */
-.redes a { font-family: var(--grotesk); font-weight: 500; font-size: 14px; text-transform: uppercase; padding: 8px 0; }
+.redes a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; padding: 8px 0; }
 
-.cv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; align-items: start; }
-.cv-col { display: flex; flex-direction: column; gap: 32px; }
-.cv-bloque { display: flex; flex-direction: column; gap: 18px; }
-.cv h3 { font-weight: 700; font-size: 13px; text-transform: uppercase; }
-.cv p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
+.cv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; align-items: start; }
+.cv-col { display: flex; flex-direction: column; gap: 28px; }
+.cv-bloque { display: flex; flex-direction: column; gap: 12px; }
+.cv h3 { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; padding-bottom: 4px; background: var(--puntos-abajo); }
+.cv p { font-size: 14.5px; line-height: 1.375; white-space: pre-line; }
 
 /* El menú de franjas y su desplegable solo existen en móvil */
 .menu, .desplegable, .velo { display: none; }
@@ -127,12 +126,12 @@ img { display: block; }
 @media (max-width: 899px) {
   :root { --g: 16px; }
   .sitio {
-    --alto-menu: calc(5 * var(--franja));   /* cuatro franjas + pie con Instagram y Email */
+    --alto-menu: calc(4 * var(--franja));   /* tres franjas + pie con Instagram y Email */
     --alto-img: calc(100dvh - var(--alto-menu) - 72px - 110px);
     --ancho-img: calc(100vw - 32px);
   }
   .lateral { display: none; }
-  .nombre { top: 24px; font-size: 16px; }
+  .nombre { top: 24px; font-size: 15px; }
   .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; padding: 72px var(--g) 16px; }
   .ficha { position: static; width: 100%; margin-top: 8px; }
   .visor .flechas { position: static; align-self: center; margin-top: 10px; gap: 24px; }
@@ -143,11 +142,11 @@ img { display: block; }
   .franja {
     display: flex; justify-content: space-between; align-items: center; width: 100%; height: var(--franja);
     padding: 0 var(--g); background: var(--puntos-arriba);
-    font-weight: 400; font-size: 14px; text-transform: uppercase; letter-spacing: .06em;
+    font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase;
   }
   .franja span:last-child { font-size: 18px; font-weight: 300; }
   .pie-movil { display: flex; align-items: center; gap: 24px; height: var(--franja); padding: 0 var(--g); background: var(--puntos-arriba); }
-  .pie-movil a { font-family: var(--grotesk); font-weight: 500; font-size: 14px; text-transform: uppercase; padding: 12px 0; }
+  .pie-movil a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; padding: 12px 0; }
 
   .desplegable {
     /* no llega arriba del todo: deja ver un poco la página */
@@ -178,15 +177,4 @@ img { display: block; }
   .cv-col { gap: 24px; }
   .cv-col + .cv-col { margin-top: 24px; }
 }
-
-/* ───────── Contacto ───────── */
-.contacto { position: relative; display: flex; flex-direction: column; min-height: 100%; }
-.contacto form { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 22px; max-width: 520px; }
-.contacto label { display: flex; flex-direction: column; gap: 6px; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
-.contacto input, .contacto textarea {
-  font: inherit; font-size: 14px; font-weight: 300; text-transform: none; letter-spacing: 0; color: var(--tinta);
-  background: transparent; border: 0; border-bottom: 1px solid var(--linea); border-radius: 0; padding: 8px 0; outline: none; resize: vertical;
-}
-.contacto input:focus, .contacto textarea:focus { border-bottom-color: var(--tinta); }
-.enviar { align-self: flex-start; padding: 12px 28px; background: var(--tinta); color: var(--fondo); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
 
