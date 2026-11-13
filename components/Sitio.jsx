@@ -7,7 +7,7 @@ import { OBRAS, ACERCA, CV, REDES } from '../lib/contenido';
 const INICIO = OBRAS[0].id;
 const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV']];
 // Ancho de cada panel lateral en escritorio (la escena se encoge en la misma medida)
-const ANCHO_PANEL = { obras: '480px', acerca: '600px', cv: 'min(900px, 58vw)' };
+const ANCHO_PANEL = { obras: '620px', acerca: '740px', cv: 'min(1040px, 66vw)' };
 const fichaDe = o => `(${o.titulo}). ${o.año}.${o.ficha ? ' ' + o.ficha : ''}`;
 const obra = id => OBRAS.find(o => o.id === id);
 const enlace = ([texto, url]) => (
@@ -173,10 +173,11 @@ export default function Sitio() {
         ))}
         <div className="pie-movil">{REDES.map(enlace)}</div>
       </nav>
+      {/* velo sobre la página: se ve un poco el fondo y al tocarlo se cierra el menú */}
+      {movil && <div className={'velo' + (abierta ? ' abierto' : '')} aria-hidden="true" onClick={() => setAbierta(null)} />}
       {movil && (
         <div className={'desplegable' + (abierta ? ' abierto' : '')} role="dialog" aria-modal="true" inert={!abierta}
           aria-label={SECCIONES.find(s => s[0] === (abierta ?? ultima))[1]}>
-          <button type="button" className="cerrar" onClick={() => setAbierta(null)}>Cerrar <span aria-hidden="true">×</span></button>
           {SECCIONES.map(([id, titulo]) => (
             <section key={id} className={'seccion' + ((abierta ?? ultima) === id ? ' abierta' : '')}>
               <button type="button" className="franja" aria-expanded={abierta === id} onClick={() => alternar(id)}>
