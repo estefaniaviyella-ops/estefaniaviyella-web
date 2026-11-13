@@ -149,7 +149,7 @@ img { display: block; }
 
   .desplegable {
     /* no llega arriba del todo: deja ver un poco la página */
-    display: flex; flex-direction: column; position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; top: 18dvh; background: var(--menta);
+    display: flex; flex-direction: column; position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; top: 12dvh; background: var(--menta);
     transform: translateY(100%); visibility: hidden;
     transition: transform var(--tiempo) var(--suave), visibility 0s linear var(--tiempo);
   }
