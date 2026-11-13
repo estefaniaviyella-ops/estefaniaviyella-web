@@ -133,7 +133,9 @@ img { display: block; }
   .nombre { top: 24px; font-size: 16px; }
   .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; padding: 72px var(--g) 16px; }
   .ficha { position: static; width: 100%; margin-top: 8px; }
-  .visor .flechas { position: static; align-self: flex-end; margin-top: 10px; }
+  .visor .flechas { position: static; align-self: center; margin-top: 10px; gap: 24px; }
+  .visor .flechas button { padding: 6px 10px; }   /* más fácil de tocar */
+  .visor { touch-action: pan-y; }
 
   .menu { display: block; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; background: var(--menta); }
   .franja {
