@@ -5,10 +5,9 @@ import Image from 'next/image';
 import { OBRAS, ACERCA, CV, REDES } from '../lib/contenido';
 
 const INICIO = OBRAS[0].id;
-const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV'], ['contacto', 'Contacto']];
+const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV']];
 // Ancho de cada panel lateral en escritorio
-const ANCHO_PANEL = { obras: '620px', acerca: '740px', cv: 'min(1040px, 66vw)', contacto: '620px' };
-const CORREO = REDES.find(([, url]) => url.startsWith('mailto:'))[1].slice(7);
+const ANCHO_PANEL = { obras: '620px', acerca: '740px', cv: 'min(1040px, 66vw)' };
 const fichaDe = o => `(${o.titulo}). ${o.año}.${o.ficha ? ' ' + o.ficha : ''}`;
 const obra = id => OBRAS.find(o => o.id === id);
 const enlace = ([texto, url]) => (
@@ -45,27 +44,6 @@ function Acerca({ onAmpliar }) {
     <div className="acerca">
       <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={1171} height={1500} sizes="220px" onClick={onAmpliar} />
       <p>{ACERCA.texto}</p>
-    </div>
-  );
-}
-
-// Formulario de contacto: al enviar abre el correo de quien escribe con el mensaje ya preparado
-function Contacto() {
-  const enviar = e => {
-    e.preventDefault();
-    const f = new FormData(e.currentTarget);
-    const asunto = `Contacto desde la web · ${f.get('nombre')}`;
-    const cuerpo = `${f.get('mensaje')}\n\n${f.get('nombre')}\n${f.get('email')}`;
-    location.href = `mailto:${CORREO}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
-  };
-  return (
-    <div className="contacto">
-      <form onSubmit={enviar}>
-        <label>Nombre<input name="nombre" required autoComplete="name" /></label>
-        <label>Email<input name="email" type="email" required autoComplete="email" /></label>
-        <label>Mensaje<textarea name="mensaje" rows={5} /></label>
-        <button type="submit" className="enviar">Enviar</button>
-      </form>
       <nav className="redes">{REDES.map(enlace)}</nav>
     </div>
   );
@@ -117,7 +95,7 @@ export default function Sitio() {
     ver(); mq.addEventListener('change', ver);
     const h = location.hash.slice(1);
     if (obra(h)) setSeleccion(h);
-    else if (h === 'acerca' || h === 'cv' || h === 'contacto') setAbierta(h);
+    else if (h === 'acerca' || h === 'cv') setAbierta(h);
     return () => mq.removeEventListener('change', ver);
   }, []);
 
@@ -148,7 +126,6 @@ export default function Sitio() {
       {id === 'obras' && <ListaObras seleccion={seleccion} onElegir={elegir} />}
       {id === 'acerca' && <Acerca onAmpliar={ampliarAcerca} />}
       {id === 'cv' && <CVColumnas />}
-      {id === 'contacto' && <Contacto />}
     </>
   );
 
@@ -205,8 +182,8 @@ export default function Sitio() {
         ))}
         <div className="pie-movil">{REDES.map(enlace)}</div>
       </nav>
-      {/* velo sobre la página: se ve un poco el fondo y al tocarlo se cierra el menú */}
-      {movil && <div className={'velo' + (abierta ? ' abierto' : '')} aria-hidden="true" onClick={() => setAbierta(null)} />}
+      {/* velo sobre la página: al hacer clic o tocar fuera del menú, se cierra (en móvil además oscurece un poco) */}
+      <div className={'velo' + (abierta ? ' abierto' : '')} aria-hidden="true" onClick={() => setAbierta(null)} />
       {movil && (
         <div className={'desplegable' + (abierta ? ' abierto' : '')} role="dialog" aria-modal="true" inert={!abierta}
           aria-label={SECCIONES.find(s => s[0] === (abierta ?? ultima))[1]}>
@@ -226,7 +203,8 @@ export default function Sitio() {
       {zoom && (
         <div className="zoom" role="dialog" aria-modal="true" aria-label="Imagen ampliada" onClick={() => setZoom(null)}>
           <div className="zoom-imagen">
-            <Image src={'/img/' + zoom.lista[zoom.i]} alt={zoom.alt} fill sizes="100vw" quality={90} style={{ objectFit: 'contain' }} />
+            <Image src={'/img/' + zoom.lista[zoom.i]} alt={zoom.alt} fill sizes="100vw" quality={90} style={{ objectFit: 'contain' }}
+              className={zoom.lista[zoom.i] === ACERCA.foto ? 'foto-suave' : undefined} />
           </div>
           <button type="button" className="zoom-cerrar" aria-label="Cerrar" autoFocus>Cerrar</button>
           {zoom.lista.length > 1 && (
