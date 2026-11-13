@@ -46,13 +46,16 @@ function Precarga({ obra: o }) {
 }
 
 function ListaObras({ seleccion, onElegir }) {
-  const grupos = SECCIONES_OBRA.map(s => [s, OBRAS.filter(o => o.seccion === s)]).filter(([, o]) => o.length);
+  const grupos = SECCIONES_OBRA.map(s => [s, OBRAS.filter(o => o.seccion === s)]);
   return (
     <div className="lista">
       {grupos.map(([seccion, obras]) => (
         <div key={seccion} className="grupo">
-          <h3>{seccion}</h3>
-          <ul className="filas">
+          {seccion === 'Selección reciente' && obras.length
+            ? <h3><button type="button" className="ir" onClick={() => onElegir(obras[0].id)}>{seccion}</button></h3>
+            : <h3>{seccion}</h3>}
+          {!obras.length && <p className="pronto">Próximamente</p>}
+          <ul className="filas" hidden={seccion === 'Selección reciente'}>
             {obras.map(ob => (
               <li key={ob.id} className={ob.id === seleccion ? 'sel' : undefined}>
                 <a href={'#' + ob.id} onClick={e => { e.preventDefault(); onElegir(ob.id); }}>
@@ -119,8 +122,10 @@ export default function Sitio() {
 
   // pasar a la obra anterior o siguiente sin abrir el menú
   const pasarObra = useCallback(paso => {
-    const i = OBRAS.findIndex(o => o.id === seleccion);
-    const sig = OBRAS[(i + paso + OBRAS.length) % OBRAS.length];
+    const actual = obra(seleccion);
+    const lista = OBRAS.filter(o => o.seccion === actual.seccion);
+    const i = lista.findIndex(o => o.id === seleccion);
+    const sig = lista[(i + paso + lista.length) % lista.length];
     setSeleccion(sig.id); setImagen(0);
     try { history.replaceState(null, '', sig.id === INICIO ? location.pathname : '#' + sig.id); } catch {}
   }, [seleccion]);
