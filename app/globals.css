@@ -63,6 +63,16 @@ img { display: block; }
 }
 
 
+/* flechas grandes a los lados: pasan de una obra a otra */
+.paso {
+  position: fixed; z-index: 25; top: 50%; transform: translateY(-50%);
+  padding: 20px 14px; font-size: 30px; line-height: 1; color: var(--tinta); opacity: .45;
+  transition: opacity .25s ease, right var(--tiempo) var(--suave);
+}
+.paso:hover { opacity: 1; }
+.paso.anterior { left: 2px; }
+.paso.siguiente { right: calc(var(--lateral) + 2px); }
+
 /* ───────── Escritorio: pestañas verticales ───────── */
 .lateral { position: fixed; z-index: 20; top: 0; right: 0; bottom: 0; display: flex; background: var(--menta); }
 .pestana {
@@ -146,6 +156,8 @@ img { display: block; }
   .visor .flechas { left: auto; }
   .ficha { text-align: center; }
   .ficha { position: static; width: 100%; margin-top: auto; padding-top: 10px; }
+  .paso { top: calc((100dvh - var(--alto-menu)) / 2); padding: 18px 10px; font-size: 26px; opacity: .55; }
+  .paso.siguiente { right: 2px; }
   .visor .flechas { position: static; align-self: center; margin-top: 10px; gap: 24px; }
   .visor .flechas button { padding: 6px 10px; }   /* más fácil de tocar */
   .visor { touch-action: pan-y; }
