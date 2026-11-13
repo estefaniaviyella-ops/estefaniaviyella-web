@@ -123,7 +123,7 @@ export default function Sitio() {
   const alternar = id => { setVista(null); setAbierta(a => (a === id ? null : id)); };
   const contenido = id => (
     <>
-      {id === 'obras' && <ListaObras seleccion={seleccion} onElegir={elegir} onPasar={movil ? undefined : setVista} />}
+      {id === 'obras' && <ListaObras seleccion={seleccion} onElegir={elegir} />}
       {id === 'acerca' && <Acerca onAmpliar={ampliarAcerca} />}
       {id === 'cv' && <CVColumnas />}
     </>
