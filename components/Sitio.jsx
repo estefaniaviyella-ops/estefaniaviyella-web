@@ -18,7 +18,7 @@ const EntradaCV = ({ e: [t, l, a] }) => <p>{`${t}\n${l}\n${a}`}</p>;
 // Imagen de una obra a la medida del hueco libre (el CSS fija el alto con --alto-img y --ancho-img)
 function Obra({ src, w, h, alt, onClick }) {
   return (
-    <Image src={'/img/' + src} alt={alt} width={w} height={h} sizes="(min-width: 900px) 75vw, 100vw" quality={92} priority
+    <Image src={'/img/' + src} alt={alt} width={w} height={h} sizes="(min-width: 900px) 75vw, 100vw" quality={96} priority
       onClick={onClick} className="obra-img" style={{ '--r': h / w }} />
   );
 }
