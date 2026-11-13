@@ -135,13 +135,13 @@ img { display: block; }
   :root { --g: 16px; }
   .sitio {
     --alto-menu: calc(4 * var(--franja));   /* tres franjas + pie con Instagram y Email */
-    --alto-img: calc(100dvh - var(--alto-menu) - 88px);
+    --alto-img: calc(100dvh - var(--alto-menu) - 108px);
     --ancho-img: calc(100vw - 16px);
   }
   .lateral { display: none; }
   .nombre { top: 24px; font-size: 15px; }
   /* en móvil todo va centrado: la obra, las flechas y la ficha */
-  .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; align-items: center; justify-content: center; padding: 0 8px 8px; }
+  .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; align-items: center; justify-content: center; padding: 0 8px 28px; }   /* un poco de aire entre la ficha y el menú */
   .visor { align-items: center; }
   .visor .flechas { left: auto; }
   .ficha { text-align: center; }
