@@ -155,7 +155,7 @@ img { display: block; }
   }
   .desplegable.abierto { transform: none; visibility: visible; transition: transform var(--tiempo) var(--suave), visibility 0s; }
   .velo {
-    display: block; position: fixed; z-index: 39; inset: 0; background: rgba(58, 58, 56, .3);
+    display: block; position: fixed; z-index: 39; inset: 0; background: rgba(58, 58, 56, .15);
     opacity: 0; pointer-events: none; transition: opacity var(--tiempo) ease;
   }
   .velo.abierto { opacity: 1; pointer-events: auto; }
