@@ -66,6 +66,7 @@ function Acerca({ onAmpliar }) {
     <div className="acerca">
       <p>{ACERCA.texto}</p>
       <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={1171} height={1500} sizes="340px" quality={92} onClick={onAmpliar} />
+      {ACERCA.textoEn && <p className="ingles">{ACERCA.textoEn}</p>}
       <nav className="redes">{REDES.map(enlace)}</nav>
     </div>
   );
