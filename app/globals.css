@@ -106,7 +106,7 @@ img { display: block; }
 .cv p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
 
 /* El menú de franjas y su desplegable solo existen en móvil */
-.menu, .desplegable { display: none; }
+.menu, .desplegable, .velo { display: none; }
 
 /* ───────── Imagen ampliada ───────── */
 .zoom {
@@ -119,7 +119,7 @@ img { display: block; }
 .zoom-flechas { position: absolute; bottom: 20px; right: 24px; display: flex; gap: 8px; font-size: 13px; }
 .zoom-flechas button { padding: 8px; }
 @keyframes aparecer { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .zoom { animation: none; } .escena, .panel, .panel-interior, .desplegable, .seccion, .contenido { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { .zoom { animation: none; } .escena, .panel, .panel-interior, .desplegable, .velo, .seccion, .contenido { transition: none !important; } }
 
 /* ───────── Móvil: franjas abajo ───────── */
 @media (max-width: 899px) {
@@ -146,15 +146,17 @@ img { display: block; }
   .pie-movil a { font-family: var(--grotesk); font-weight: 500; font-size: 14px; text-transform: uppercase; padding: 12px 0; }
 
   .desplegable {
-    display: flex; flex-direction: column; position: fixed; z-index: 40; inset: 0; background: var(--menta);
+    /* no llega arriba del todo: deja ver un poco la página */
+    display: flex; flex-direction: column; position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; top: 18dvh; background: var(--menta);
     transform: translateY(100%); visibility: hidden;
     transition: transform var(--tiempo) var(--suave), visibility 0s linear var(--tiempo);
   }
   .desplegable.abierto { transform: none; visibility: visible; transition: transform var(--tiempo) var(--suave), visibility 0s; }
-  .cerrar {
-    flex: none; display: flex; justify-content: center; align-items: center; gap: 10px; height: var(--franja);
-    background: var(--tinta); color: var(--fondo); font-size: 14px; text-align: center;
+  .velo {
+    display: block; position: fixed; z-index: 39; inset: 0; background: rgba(58, 58, 56, .3);
+    opacity: 0; pointer-events: none; transition: opacity var(--tiempo) ease;
   }
+  .velo.abierto { opacity: 1; pointer-events: auto; }
   /* cada sección mide una franja; la abierta crece hasta llenar el hueco (casi 0 → 1 para que la transición sea continua) */
   .seccion {
     flex: .0001 0 var(--franja); min-height: 0; display: flex; flex-direction: column; overflow: hidden;
