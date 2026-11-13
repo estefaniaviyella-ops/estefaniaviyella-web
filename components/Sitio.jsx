@@ -8,8 +8,11 @@ const INICIO = OBRAS[0].id;
 const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV']];
 // Ancho de cada panel lateral en escritorio
 const ANCHO_PANEL = { obras: '480px', acerca: '540px', cv: 'min(820px, 56vw)' };
-// primera línea: título y año; segunda línea: la ficha técnica
-const fichaDe = o => `(${o.titulo}).${o.año ? ' ' + o.año + '.' : ''}${o.ficha ? '\n' + o.ficha : ''}`;
+// primera línea: el título; segunda línea: técnica, medidas, año y edición
+const fichaDe = o => {
+  const abajo = [o.ficha, o.año && o.año + '.', o.edicion].filter(Boolean).join(' ');
+  return `(${o.titulo}).${abajo ? '\n' + abajo : ''}`;
+};
 const obra = id => OBRAS.find(o => o.id === id);
 const enlace = ([texto, url]) => (
   <a key={texto} href={url} target={url.startsWith('http') ? '_blank' : undefined} rel="noopener">{texto}</a>
