@@ -77,6 +77,7 @@ export default function Sitio() {
   const [abierta, setAbierta] = useState(null);   // sección abierta: 'obras' | 'acerca' | 'cv' | null
   const [zoom, setZoom] = useState(null);         // { lista, i, alt }
   const [movil, setMovil] = useState(false);
+  const [ultima, setUltima] = useState('obras');  // sección que se ve mientras el desplegable móvil baja al cerrarse
 
   const mostrada = vista ?? seleccion;
   const o = obra(mostrada);
@@ -97,6 +98,8 @@ export default function Sitio() {
     else if (h === 'acerca' || h === 'cv') setAbierta(h);
     return () => mq.removeEventListener('change', ver);
   }, []);
+
+  useEffect(() => { if (abierta) setUltima(abierta); }, [abierta]);
 
   // En móvil el desplegable ocupa la pantalla: la página de detrás no se mueve
   useEffect(() => {
@@ -154,7 +157,10 @@ export default function Sitio() {
             <button type="button" className={'pestana' + (abierta === id ? ' abierta' : '')} aria-expanded={abierta === id} onClick={() => alternar(id)}>
               <span className="pestana-texto">{titulo}</span><span aria-hidden="true">{abierta === id ? '−' : '+'}</span>
             </button>
-            {abierta === id && !movil && <div className={'panel panel-' + id}>{contenido(id)}</div>}
+            {/* siempre montado: abrir y cerrar es animar su ancho */}
+            <div className={'panel panel-' + id + (abierta === id && !movil ? ' abierto' : '')} inert={abierta !== id || movil}>
+              <div className="panel-interior">{contenido(id)}</div>
+            </div>
           </Fragment>
         ))}
       </aside>
@@ -168,15 +174,16 @@ export default function Sitio() {
         ))}
         <div className="pie-movil">{REDES.map(enlace)}</div>
       </nav>
-      {abierta && movil && (
-        <div className="desplegable" role="dialog" aria-modal="true" aria-label={SECCIONES.find(s => s[0] === abierta)[1]}>
+      {movil && (
+        <div className={'desplegable' + (abierta ? ' abierto' : '')} role="dialog" aria-modal="true" inert={!abierta}
+          aria-label={SECCIONES.find(s => s[0] === (abierta ?? ultima))[1]}>
           <button type="button" className="cerrar" onClick={() => setAbierta(null)}>Cerrar <span aria-hidden="true">×</span></button>
           {SECCIONES.map(([id, titulo]) => (
-            <section key={id} className={'seccion' + (abierta === id ? ' abierta' : '')}>
+            <section key={id} className={'seccion' + ((abierta ?? ultima) === id ? ' abierta' : '')}>
               <button type="button" className="franja" aria-expanded={abierta === id} onClick={() => alternar(id)}>
-                <span>{titulo}</span><span aria-hidden="true">{abierta === id ? '−' : '+'}</span>
+                <span>{titulo}</span><span aria-hidden="true">{(abierta ?? ultima) === id ? '−' : '+'}</span>
               </button>
-              {abierta === id && <div className="contenido">{contenido(id)}</div>}
+              {(abierta ?? ultima) === id && <div className="contenido">{contenido(id)}</div>}
             </section>
           ))}
         </div>
