@@ -42,7 +42,7 @@ function ListaObras({ seleccion, onElegir, onPasar }) {
 function Acerca({ onAmpliar }) {
   return (
     <div className="acerca">
-      <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={1171} height={1500} sizes="220px" onClick={onAmpliar} />
+      <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={1171} height={1500} sizes="170px" onClick={onAmpliar} />
       <p>{ACERCA.texto}</p>
       <nav className="redes">{REDES.map(enlace)}</nav>
     </div>
