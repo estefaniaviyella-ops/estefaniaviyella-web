@@ -1,8 +1,8 @@
-import { DM_Mono, Inter_Tight } from 'next/font/google';
+import { DM_Mono, Instrument_Sans } from 'next/font/google';
 import './globals.css';
 
 const mono = DM_Mono({ subsets: ['latin', 'latin-ext'], weight: ['300', '400', '500'], variable: '--fuente-mono' });
-const grotesk = Inter_Tight({ subsets: ['latin', 'latin-ext'], weight: ['400', '500'], variable: '--fuente-grotesk' });
+const grotesk = Instrument_Sans({ subsets: ['latin', 'latin-ext'], weight: ['400', '500'], variable: '--fuente-grotesk' });
 
 export const metadata = {
   title: 'Estefanía Viyella',

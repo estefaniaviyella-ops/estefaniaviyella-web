@@ -6,7 +6,7 @@
   --tinta: #262626;
   --hueco: #E7E4DC;
   --mono: var(--fuente-mono), "DM Mono", ui-monospace, monospace;
-  --grotesk: var(--fuente-grotesk), "Inter Tight", system-ui, sans-serif;
+  --grotesk: var(--fuente-grotesk), "Instrument Sans", system-ui, sans-serif;
   /* línea de puntos de 1px (arriba, abajo, izquierda) */
   --puntos-arriba: linear-gradient(to right, var(--linea) 1px, transparent 1px) 0 0 / 2px 1px repeat-x;
   --puntos-abajo: linear-gradient(to right, var(--linea) 1px, transparent 1px) 0 100% / 2px 1px repeat-x;
@@ -36,7 +36,7 @@ img { display: block; }
 
 .nombre {
   position: fixed; z-index: 30; left: var(--g); top: 24px;
-  font-family: var(--grotesk); font-weight: 500; font-size: 15px; text-transform: uppercase;
+  font-family: var(--grotesk); font-weight: 500; font-size: 15px; text-transform: uppercase; letter-spacing: .04em;
 }
 
 /* ───────── Obra ───────── */
@@ -71,7 +71,7 @@ img { display: block; }
   padding: 24px 0 20px; background: var(--puntos-izquierda);
 }
 .pestana.abierta { background: var(--abierto) var(--puntos-izquierda); }
-.pestana-texto { writing-mode: vertical-rl; font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; }
+.pestana-texto { writing-mode: vertical-rl; font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; letter-spacing: .04em; }
 .pestana > span:last-child { font-size: 18px; }
 .panel {
   flex: none; height: 100%; width: 0; overflow: hidden;
@@ -102,13 +102,13 @@ img { display: block; }
 .acerca .foto { width: 170px; height: auto; cursor: zoom-in; }
 .acerca p { max-width: 420px; font-size: 14.5px; line-height: 1.375; white-space: pre-line; }
 .redes { display: flex; gap: 24px; margin-top: auto; }   /* Instagram y Email al fondo del panel */
-.redes a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; padding: 8px 0; }
+.redes a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; letter-spacing: .04em; padding: 8px 0; }
 
 .cv-panel { display: flex; flex-direction: column; gap: 32px; min-height: 100%; }   /* CV y, al final, Instagram y Email */
 .cv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; align-items: start; }
 .cv-col { display: flex; flex-direction: column; gap: 28px; }
 .cv-bloque { display: flex; flex-direction: column; gap: 12px; }
-.cv h3 { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; padding-bottom: 4px; background: var(--puntos-abajo); }
+.cv h3 { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; letter-spacing: .04em; padding-bottom: 4px; background: var(--puntos-abajo); }
 .cv p { font-size: 14.5px; line-height: 1.375; white-space: pre-line; }
 
 /* El menú de franjas solo existe en móvil */
@@ -135,13 +135,13 @@ img { display: block; }
   :root { --g: 16px; }
   .sitio {
     --alto-menu: calc(4 * var(--franja));   /* tres franjas + pie con Instagram y Email */
-    --alto-img: calc(100dvh - var(--alto-menu) - 72px - 110px);
-    --ancho-img: calc(100vw - 32px);
+    --alto-img: calc(100dvh - var(--alto-menu) - 88px);
+    --ancho-img: calc(100vw - 16px);
   }
   .lateral { display: none; }
   .nombre { top: 24px; font-size: 15px; }
   /* en móvil todo va centrado: la obra, las flechas y la ficha */
-  .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; align-items: center; justify-content: center; padding: 72px var(--g) 16px; }
+  .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; align-items: center; justify-content: center; padding: 0 8px 8px; }
   .visor { align-items: center; }
   .visor .flechas { left: auto; }
   .ficha { text-align: center; }
@@ -154,12 +154,12 @@ img { display: block; }
   .franja {
     display: flex; justify-content: space-between; align-items: center; width: 100%; height: var(--franja);
     padding: 0 var(--g); background: var(--puntos-arriba);
-    font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase;
+    font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; letter-spacing: .04em;
     transition: background-color .3s ease;
   }
   .franja span:last-child { font-size: 18px; font-weight: 300; }
   .pie-movil { display: flex; align-items: center; gap: 24px; height: var(--franja); padding: 0 var(--g); background: var(--puntos-arriba); }
-  .pie-movil a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; padding: 12px 0; }
+  .pie-movil a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; letter-spacing: .04em; padding: 12px 0; }
 
   /* acordeón: el contenido de la franja abierta crece hacia arriba y empuja las franjas de encima */
   .seccion .contenido {
