@@ -29,7 +29,7 @@ img { display: block; }
 
 /* Escritorio: las pestañas ocupan la derecha; la obra no se mueve y el panel abierto la tapa por encima */
 .sitio {
-  --lateral: calc(3 * var(--pestana));
+  --lateral: calc(4 * var(--pestana));
   --alto-img: calc(100vh - var(--contacto) - 96px - 64px);
   --ancho-img: calc(100vw - var(--lateral) - 30vw - 108px);
 }
@@ -82,6 +82,7 @@ img { display: block; }
 .panel-acerca .panel-interior, .panel-acerca.abierto { width: 740px; }
 .panel-acerca .panel-interior { padding-bottom: 14px; }   /* Instagram y Email a la altura del − */
 .panel-cv .panel-interior, .panel-cv.abierto { width: min(1040px, 66vw); }
+.panel-contacto .panel-interior, .panel-contacto.abierto { width: 620px; }
 
 /* ───────── Contenidos (panel en escritorio, desplegable en móvil) ───────── */
 .lista .cabecera {
@@ -126,7 +127,7 @@ img { display: block; }
 @media (max-width: 899px) {
   :root { --g: 16px; }
   .sitio {
-    --alto-menu: calc(4 * var(--franja));   /* tres franjas + pie con Instagram y Email */
+    --alto-menu: calc(5 * var(--franja));   /* cuatro franjas + pie con Instagram y Email */
     --alto-img: calc(100dvh - var(--alto-menu) - 72px - 110px);
     --ancho-img: calc(100vw - 32px);
   }
@@ -177,3 +178,23 @@ img { display: block; }
   .cv-col { gap: 24px; }
   .cv-col + .cv-col { margin-top: 24px; }
 }
+
+/* ───────── Contacto ───────── */
+.contacto { display: flex; flex-direction: column; gap: 32px; max-width: 520px; }
+.banda {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%;
+  padding: 16px 18px; background: var(--tinta); color: var(--fondo);
+  font-weight: 400; font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
+}
+.contacto form { display: flex; flex-direction: column; gap: 22px; }
+.contacto label, .motivos legend { display: flex; flex-direction: column; gap: 6px; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+.contacto input:not([type=radio]), .contacto textarea {
+  font: inherit; font-size: 14px; font-weight: 300; text-transform: none; letter-spacing: 0; color: var(--tinta);
+  background: transparent; border: 0; border-bottom: 1px solid var(--linea); border-radius: 0; padding: 8px 0; outline: none; resize: vertical;
+}
+.contacto input:focus, .contacto textarea:focus { border-bottom-color: var(--tinta); }
+.motivos { border: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.motivos legend { margin-bottom: 10px; }
+.motivos label { flex-direction: row; align-items: center; gap: 8px; font-size: 13px; font-weight: 300; text-transform: none; letter-spacing: 0; cursor: pointer; }
+.motivos input { accent-color: var(--tinta); }
+.enviar { align-self: flex-start; padding: 12px 28px; background: var(--tinta); color: var(--fondo); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
