@@ -15,11 +15,29 @@ const enlace = ([texto, url]) => (
 );
 const EntradaCV = ({ e: [t, l, a] }) => <p>{`${t}\n${l}\n${a}`}</p>;
 
+const MEDIDAS = '(min-width: 900px) 75vw, 100vw';   // mismo valor en el visor y en la precarga
+const CALIDAD = 96;
+
 // Imagen de una obra a la medida del hueco libre (el CSS fija el alto con --alto-img y --ancho-img)
 function Obra({ src, w, h, alt, onClick }) {
   return (
-    <Image src={'/img/' + src} alt={alt} width={w} height={h} sizes="(min-width: 900px) 75vw, 100vw" quality={96} priority
+    <Image src={'/img/' + src} alt={alt} width={w} height={h} sizes={MEDIDAS} quality={CALIDAD} priority
       onClick={onClick} className="obra-img" style={{ '--r': h / w }} />
+  );
+}
+
+// Descarga en segundo plano las demás obras: al elegir una en el listado aparece al instante
+function Precarga({ obra: o }) {
+  const fotos = [
+    ...OBRAS.filter(x => x.id !== o.id && x.imagenes).map(x => x.imagenes[0]),
+    ...(o.imagenes?.slice(1) ?? []),
+  ];
+  return (
+    <div className="precarga" aria-hidden="true">
+      {fotos.map(([src, w, h]) => (
+        <Image key={src} src={'/img/' + src} alt="" width={w} height={h} sizes={MEDIDAS} quality={CALIDAD} loading="eager" />
+      ))}
+    </div>
   );
 }
 
@@ -80,6 +98,7 @@ export default function Sitio() {
   const [zoom, setZoom] = useState(null);         // { lista, i, alt }
   const [movil, setMovil] = useState(false);
   const toque = useRef(null);                      // x donde empezó el dedo, para el swipe entre fotos
+  const [precargar, setPrecargar] = useState(false);   // descargar el resto de obras una vez cargada la primera
   const deslizo = useRef(false);                   // el último toque en la ampliación fue un swipe, no un tap
 
   const mostrada = vista ?? seleccion;
@@ -90,6 +109,11 @@ export default function Sitio() {
   const elegir = useCallback(id => {
     setSeleccion(id); setVista(null); setImagen(0); setAbierta(null);
     try { history.replaceState(null, '', id === INICIO ? location.pathname : '#' + id); } catch {}
+  }, []);
+
+  useEffect(() => {
+    const t = setTimeout(() => setPrecargar(true), 1200);
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
@@ -158,6 +182,7 @@ export default function Sitio() {
           </div>
         </figure>
         <p className="ficha">{fichaDe(o)}</p>
+        {precargar && <Precarga obra={o} />}
       </main>
 
       {/* ───────── Escritorio: pestañas verticales a la derecha ───────── */}
