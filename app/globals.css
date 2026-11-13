@@ -1,10 +1,10 @@
 :root {
-  --fondo: #F1F0EC;
+  --fondo: #FBFAF7;                 /* fondo claro */
   --abierto: #FFFFFF;              /* pestaña y panel abiertos */
   --linea: #262626;                 /* línea de puntos */
   --menta: #F2E297;                 /* amarillo del menú */
   --tinta: #262626;
-  --hueco: #DEDBD2;
+  --hueco: #E7E4DC;
   --mono: var(--fuente-mono), "DM Mono", ui-monospace, monospace;
   --grotesk: var(--fuente-grotesk), "Inter Tight", system-ui, sans-serif;
   /* línea de puntos de 1px (arriba, abajo, izquierda) */
@@ -44,7 +44,7 @@ img { display: block; }
   position: fixed; top: 0; left: 0; right: var(--lateral); bottom: var(--contacto);
   /* la obra a la izquierda; a la derecha queda sitio para la ficha */
   display: flex; align-items: center; justify-content: flex-start;
-  padding: 72px calc(30vw + 48px) 56px var(--g);
+  padding: 72px calc(30vw + 48px) 56px 72px;   /* la obra, algo más separada del borde */
   transition: right var(--tiempo) var(--suave), padding var(--tiempo) var(--suave);
 }
 .visor { display: inline-flex; flex-direction: column; }
@@ -54,7 +54,7 @@ img { display: block; }
 }
 .visor .hueco { background: var(--hueco); cursor: default; }
 /* flechas siempre en el mismo sitio: esquina de abajo a la izquierda */
-.visor .flechas { position: absolute; left: var(--g); bottom: 22px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
+.visor .flechas { position: absolute; left: 72px; bottom: 22px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
 .ficha {
   position: absolute; right: var(--g); bottom: 24px; width: min(640px, 30vw);
   font-size: 14.5px; line-height: 1.375;
@@ -139,6 +139,7 @@ img { display: block; }
   .lateral { display: none; }
   .nombre { top: 24px; font-size: 15px; }
   .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; padding: 72px var(--g) 16px; }
+  .visor .flechas { left: auto; }
   .ficha { position: static; width: 100%; margin-top: 8px; }
   .visor .flechas { position: static; align-self: center; margin-top: 10px; gap: 24px; }
   .visor .flechas button { padding: 6px 10px; }   /* más fácil de tocar */
