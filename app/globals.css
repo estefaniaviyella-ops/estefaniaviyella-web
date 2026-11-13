@@ -59,7 +59,7 @@ img { display: block; }
 .visor .flechas { position: absolute; left: 17vw; bottom: 22px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
 .ficha {
   position: absolute; z-index: 5; right: var(--g); bottom: 24px; width: min(640px, 30vw);
-  font-size: 14.5px; line-height: 1.375;
+  font-size: 14.5px; line-height: 1.375; white-space: pre-line;
 }
 
 
