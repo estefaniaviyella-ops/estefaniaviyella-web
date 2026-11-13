@@ -81,6 +81,7 @@ export default function Sitio() {
   const [movil, setMovil] = useState(false);
   const [ultima, setUltima] = useState('obras');  // sección que se ve mientras el desplegable móvil baja al cerrarse
   const toque = useRef(null);                      // x donde empezó el dedo, para el swipe entre fotos
+  const deslizo = useRef(false);                   // el último toque en la ampliación fue un swipe, no un tap
 
   const mostrada = vista ?? seleccion;
   const o = obra(mostrada);
@@ -204,7 +205,17 @@ export default function Sitio() {
 
       {/* ───────── Imagen ampliada ───────── */}
       {zoom && (
-        <div className="zoom" role="dialog" aria-modal="true" aria-label="Imagen ampliada" onClick={() => setZoom(null)}>
+        <div className="zoom" role="dialog" aria-modal="true" aria-label="Imagen ampliada"
+          onClick={() => { if (deslizo.current) { deslizo.current = false; return; } setZoom(null); }}
+          onTouchStart={e => { toque.current = e.touches[0].clientX; }}
+          onTouchEnd={e => {
+            // deslizar el dedo pasa a la foto siguiente o anterior (y no cierra la ampliación)
+            const x0 = toque.current; toque.current = null;
+            const m = zoom.lista.length;
+            if (x0 == null || m < 2) return;
+            const dx = e.changedTouches[0].clientX - x0;
+            if (Math.abs(dx) > 40) { deslizo.current = true; setZoom(z => ({ ...z, i: (z.i + (dx < 0 ? 1 : -1) + m) % m })); }
+          }}>
           <div className="zoom-imagen">
             <Image src={'/img/' + zoom.lista[zoom.i]} alt={zoom.alt} fill sizes="100vw" quality={90} style={{ objectFit: 'contain' }}
               className={zoom.lista[zoom.i] === ACERCA.foto ? 'foto-suave' : undefined} />
