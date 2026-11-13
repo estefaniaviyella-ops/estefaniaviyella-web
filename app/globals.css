@@ -80,7 +80,7 @@ img { display: block; }
 .panel.abierto .panel-interior { opacity: 1; transition: opacity .4s ease .12s; }
 .panel-obras .panel-interior, .panel-obras.abierto { width: 620px; }
 .panel-acerca .panel-interior, .panel-acerca.abierto { width: 740px; }
-.panel-acerca .panel-interior { padding-bottom: 14px; }   /* Instagram y Email a la altura del − */
+.panel-contacto .panel-interior { padding-bottom: 14px; }   /* Instagram y Email a la altura del − */
 .panel-cv .panel-interior, .panel-cv.abierto { width: min(1040px, 66vw); }
 .panel-contacto .panel-interior, .panel-contacto.abierto { width: 620px; }
 
@@ -95,7 +95,7 @@ img { display: block; }
 }
 .filas li.sel .titulo, .filas li a:hover .titulo { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
-.acerca { display: flex; flex-direction: column; gap: 28px; min-height: 100%; }
+.acerca { display: flex; flex-direction: column; gap: 28px; }
 .acerca .foto { width: 220px; height: auto; cursor: zoom-in; }
 .acerca p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
 .redes { display: flex; gap: 24px; margin-top: auto; }   /* Instagram y Email al fondo del panel */
@@ -172,7 +172,7 @@ img { display: block; }
   .seccion.abierta .contenido { opacity: 1; transition: opacity .35s ease .15s; }
   .seccion.abierta > .franja { background: var(--abierto) var(--puntos-arriba); }
   .seccion.abierta .contenido { background: var(--abierto); }
-  .contenido { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 28px var(--g) 48px; }
+  .contenido { flex: 1; min-height: 0; overflow-y: auto; padding: 28px var(--g) 48px; }
   .acerca .foto { width: 167px; }
   .cv { grid-template-columns: 1fr; }
   .cv-col { gap: 24px; }
@@ -190,12 +190,3 @@ img { display: block; }
 .contacto input:focus, .contacto textarea:focus { border-bottom-color: var(--tinta); }
 .enviar { align-self: flex-start; padding: 12px 28px; background: var(--tinta); color: var(--fondo); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
 
-/* cinta curva de letras amarillo crema que corre en bucle; solo la cinta recibe el ratón */
-.cinta {
-  display: block; margin-top: auto; margin-left: calc(-1 * var(--g)); width: calc(100% + 2 * var(--g)); height: auto;
-  overflow: visible; pointer-events: none;
-}
-.cinta-banda { pointer-events: visiblePainted; cursor: pointer; }
-.cinta-fondo { stroke: transparent; stroke-width: 50; pointer-events: stroke; }   /* invisible: solo sirve para el ratón */
-.cinta text { font-family: var(--mono); font-weight: 400; font-size: 20px; letter-spacing: .02em; fill: #E9CF7A; }   /* misma letra que los textos, en amarillo crema */
-.panel-contacto .panel-interior { overflow-x: hidden; }
