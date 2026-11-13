@@ -111,6 +111,14 @@ export default function Sitio() {
   const idx = mostrada === seleccion ? imagen : 0;
   const n = o.imagenes?.length ?? 0;
 
+  // pasar a la obra anterior o siguiente sin abrir el menú
+  const pasarObra = useCallback(paso => {
+    const i = OBRAS.findIndex(o => o.id === seleccion);
+    const sig = OBRAS[(i + paso + OBRAS.length) % OBRAS.length];
+    setSeleccion(sig.id); setImagen(0);
+    try { history.replaceState(null, '', sig.id === INICIO ? location.pathname : '#' + sig.id); } catch {}
+  }, [seleccion]);
+
   const elegir = useCallback(id => {
     setSeleccion(id); setVista(null); setImagen(0); setAbierta(null);
     try { history.replaceState(null, '', id === INICIO ? location.pathname : '#' + id); } catch {}
@@ -145,10 +153,12 @@ export default function Sitio() {
         if (m > 1 && e.key === 'ArrowLeft') setZoom(z => ({ ...z, i: (z.i - 1 + m) % m }));
         if (m > 1 && e.key === 'ArrowRight') setZoom(z => ({ ...z, i: (z.i + 1) % m }));
       } else if (e.key === 'Escape') setAbierta(null);
+      else if (!abierta && e.key === 'ArrowLeft') pasarObra(-1);
+      else if (!abierta && e.key === 'ArrowRight') pasarObra(1);
     };
     addEventListener('keydown', tecla);
     return () => removeEventListener('keydown', tecla);
-  }, [zoom]);
+  }, [zoom, abierta, pasarObra]);
 
   const ampliarAcerca = () => setZoom({ lista: [ACERCA.foto], i: 0, alt: 'Estefanía Viyella' });
   const alternar = id => { setVista(null); setAbierta(a => (a === id ? null : id)); };
@@ -219,6 +229,10 @@ export default function Sitio() {
           </section>
         ))}
       </nav>
+      {/* flechas grandes: pasan a la obra anterior o siguiente */}
+      <button type="button" className="paso anterior" aria-label="Obra anterior" onClick={() => pasarObra(-1)}>←</button>
+      <button type="button" className="paso siguiente" aria-label="Obra siguiente" onClick={() => pasarObra(1)}>→</button>
+
       {/* velo sobre la página: al hacer clic o tocar fuera del menú, se cierra (en móvil además oscurece un poco) */}
       <div className={'velo' + (abierta ? ' abierto' : '')} aria-hidden="true" onClick={() => setAbierta(null)} />
 
