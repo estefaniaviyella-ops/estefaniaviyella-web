@@ -5,9 +5,10 @@
   --hueco: #DEDBD2;
   --mono: var(--fuente-mono), "Chivo Mono", ui-monospace, monospace;
   --grotesk: var(--fuente-grotesk), "Familjen Grotesk", system-ui, sans-serif;
-  --puntos-arriba: linear-gradient(to right, var(--tinta) 1px, transparent 1px) 0 0 / 4px 1px repeat-x;
-  --puntos-abajo: linear-gradient(to right, var(--tinta) 1px, transparent 1px) 0 100% / 4px 1px repeat-x;
-  --puntos-izquierda: linear-gradient(to bottom, var(--tinta) 1px, transparent 1px) 0 0 / 1px 4px repeat-y;
+  /* líneas finas continuas (arriba, abajo, izquierda) */
+  --puntos-arriba: linear-gradient(var(--tinta), var(--tinta)) 0 0 / 100% 1px no-repeat;
+  --puntos-abajo: linear-gradient(var(--tinta), var(--tinta)) 0 100% / 100% 1px no-repeat;
+  --puntos-izquierda: linear-gradient(var(--tinta), var(--tinta)) 0 0 / 1px 100% no-repeat;
   --g: 36px;
   --pestana: 56px;
   --contacto: 0px;
@@ -24,20 +25,12 @@ a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 img { display: block; }
 
-/* Escritorio: las pestañas (y el panel abierto, --panel) ocupan la derecha; la obra se ajusta al hueco que queda */
+/* Escritorio: las pestañas ocupan la derecha; la obra no se mueve y el panel abierto la tapa por encima */
 .sitio {
-  --lateral: calc(3 * var(--pestana) + var(--panel));
+  --lateral: calc(3 * var(--pestana));
   --alto-img: calc(100vh - var(--contacto) - 96px - 64px);
   --ancho-img: calc(100vw - var(--lateral) - 30vw - 108px);
 }
-
-/* Con un panel abierto la obra aprovecha también el lado izquierdo (la ficha queda debajo) */
-.sitio[data-panel] {
-  --alto-img: calc(100vh - var(--contacto) - 96px - 130px);
-  --ancho-img: calc(100vw - var(--lateral) - 72px);
-}
-/* la obra se queda pegada al menú: crece y encoge desde su borde derecho */
-.sitio[data-panel] .escena { padding-left: var(--g); padding-bottom: 96px; justify-content: flex-end; }
 
 .nombre {
   position: fixed; z-index: 30; left: var(--g); top: 40px;
