@@ -190,12 +190,12 @@ img { display: block; }
 .contacto input:focus, .contacto textarea:focus { border-bottom-color: var(--tinta); }
 .enviar { align-self: flex-start; padding: 12px 28px; background: var(--tinta); color: var(--fondo); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
 
-/* cinta curva amarillo crema que corre por detrás; solo la banda recibe el ratón */
+/* cinta curva de letras amarillo crema que corre en bucle; solo la cinta recibe el ratón */
 .cinta {
   display: block; margin-top: auto; margin-left: calc(-1 * var(--g)); width: calc(100% + 2 * var(--g)); height: auto;
   overflow: visible; pointer-events: none;
 }
 .cinta-banda { pointer-events: visiblePainted; cursor: pointer; }
-.cinta-fondo { stroke: #F3E3A6; stroke-width: 50; }
-.cinta text { font-family: var(--mono); font-weight: 400; font-size: 18px; letter-spacing: .08em; fill: var(--tinta); }
+.cinta-fondo { stroke: transparent; stroke-width: 50; pointer-events: stroke; }   /* invisible: solo sirve para el ratón */
+.cinta text { font-family: var(--mono); font-weight: 700; font-size: 26px; letter-spacing: .06em; fill: #E9CF7A; }   /* amarillo crema */
 .panel-contacto .panel-interior { overflow-x: hidden; }
