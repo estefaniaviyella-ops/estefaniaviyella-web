@@ -216,7 +216,7 @@ export default function Sitio() {
           <div className="flechas">
             <button type="button" aria-label="Anterior" onClick={() => pasar(-1)}>←</button>
             <button type="button" aria-label="Siguiente" onClick={() => pasar(1)}>→</button>
-            {seccionSiguiente && <span className="aviso">{seccionSiguiente}</span>}
+            {seccionSiguiente && <span className="aviso">Ver {seccionSiguiente}</span>}
           </div>
         </figure>
         <p className="ficha">{fichaDe(o)}</p>
