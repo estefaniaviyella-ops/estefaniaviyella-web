@@ -101,6 +101,7 @@ img { display: block; }
 .acerca .foto, .foto-suave { filter: contrast(.82) brightness(1.06); }   /* retrato con menos contraste */
 .acerca .foto { width: 170px; height: auto; cursor: zoom-in; }
 .acerca p { max-width: 420px; font-size: 14.5px; line-height: 1.375; white-space: pre-line; }
+.acerca .ingles { font-style: italic; }   /* la versión en inglés, debajo de la foto */
 .redes { display: flex; gap: 24px; margin-top: auto; }   /* Instagram y Email al fondo del panel */
 .redes a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; letter-spacing: .04em; padding: 8px 0; }
 
