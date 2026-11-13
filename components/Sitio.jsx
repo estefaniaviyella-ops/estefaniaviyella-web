@@ -10,7 +10,7 @@ const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv'
 const ANCHO_PANEL = { obras: '620px', acerca: '740px', cv: 'min(1040px, 66vw)', contacto: '620px' };
 const FRASE_CINTA = 'PREGÚNTAME POR OBRAS DISPONIBLES ✦ ';
 const REPETICIONES = 8;
-const MENSAJE_OBRAS = '¡Hola, Estefanía! Vengo a curiosear: ¿qué obras tienes disponibles? Me encantaría ver el catálogo.';
+const MENSAJE_OBRAS = 'Me encantaría ver el catálogo.';
 const CORREO = REDES.find(([, url]) => url.startsWith('mailto:'))[1].slice(7);
 const fichaDe = o => `(${o.titulo}). ${o.año}.${o.ficha ? ' ' + o.ficha : ''}`;
 const obra = id => OBRAS.find(o => o.id === id);
@@ -76,7 +76,7 @@ function Cinta({ onPedir }) {
       <g className="cinta-banda" onMouseEnter={() => { quieta.current = true; onPedir(); }}
         onMouseLeave={() => { quieta.current = false; }} onClick={onPedir}>
         <use href={'#' + id} className="cinta-fondo" />
-        <text ref={texto} dy="9"><textPath href={'#' + id}>{FRASE_CINTA.repeat(REPETICIONES)}</textPath></text>
+        <text ref={texto} dy="7"><textPath href={'#' + id}>{FRASE_CINTA.repeat(REPETICIONES)}</textPath></text>
       </g>
     </svg>
   );
