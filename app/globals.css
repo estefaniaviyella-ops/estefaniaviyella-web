@@ -78,12 +78,13 @@ img { display: block; }
 }
 .panel-interior { height: 100%; overflow-y: auto; padding: 30vh var(--g) 40px;   /* los textos empiezan más abajo, como la referencia */ opacity: 0; transition: opacity .3s ease; }
 .panel.abierto .panel-interior { opacity: 1; transition: opacity .4s ease .12s; }
-.panel-obras .panel-interior, .panel-obras.abierto { width: 620px; }
-.panel-acerca .panel-interior, .panel-acerca.abierto { width: 740px; }
-.panel-acerca .panel-interior, .panel-cv .panel-interior { padding-bottom: 14px; }   /* Instagram y Email a la altura del − */
-.panel-cv .panel-interior, .panel-cv.abierto { width: min(1040px, 66vw); }
+.panel-obras .panel-interior, .panel-obras.abierto { width: 480px; }
+.panel-acerca .panel-interior, .panel-acerca.abierto { width: 540px; }
+.panel-acerca .panel-interior, .panel-cv .panel-interior { padding-bottom: 14px; }
+.panel-acerca .panel-interior { padding-top: 16vh; }   /* Acerca es largo: empieza algo antes y cabe entero */   /* Instagram y Email a la altura del − */
+.panel-cv .panel-interior, .panel-cv.abierto { width: min(820px, 56vw); }
 
-/* ───────── Contenidos (panel en escritorio, desplegable en móvil) ───────── */
+/* ───────── Contenidos (panel en escritorio, menú desplegado en móvil) ───────── */
 .lista .cabecera {
   display: flex; justify-content: space-between; padding-bottom: 10px; margin-bottom: 4px;
   font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; background: var(--puntos-abajo);
@@ -95,9 +96,10 @@ img { display: block; }
 .filas li.sel .titulo, .filas li a:hover .titulo { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
 .acerca { display: flex; flex-direction: column; gap: 20px; min-height: 100%; }
+.acerca .foto { margin-top: 56px; }   /* la foto, separada del texto */
 .acerca .foto, .foto-suave { filter: contrast(.82) brightness(1.06); }   /* retrato con menos contraste */
 .acerca .foto { width: 170px; height: auto; cursor: zoom-in; }
-.acerca p { font-size: 14.5px; line-height: 1.375; white-space: pre-line; }
+.acerca p { max-width: 420px; font-size: 14.5px; line-height: 1.375; white-space: pre-line; }
 .redes { display: flex; gap: 24px; margin-top: auto; }   /* Instagram y Email al fondo del panel */
 .redes a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; padding: 8px 0; }
 
@@ -108,8 +110,8 @@ img { display: block; }
 .cv h3 { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; padding-bottom: 4px; background: var(--puntos-abajo); }
 .cv p { font-size: 14.5px; line-height: 1.375; white-space: pre-line; }
 
-/* El menú de franjas y su desplegable solo existen en móvil */
-.menu, .desplegable { display: none; }
+/* El menú de franjas solo existe en móvil */
+.menu { display: none; }
 /* escritorio: capa invisible bajo el menú; con un panel abierto, un clic fuera lo cierra */
 .velo { position: fixed; z-index: 19; inset: 0; display: none; }
 .velo.abierto { display: block; }
@@ -125,7 +127,7 @@ img { display: block; }
 .zoom-flechas { position: absolute; bottom: 20px; right: 24px; display: flex; gap: 8px; font-size: 13px; }
 .zoom-flechas button { padding: 8px; }
 @keyframes aparecer { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .zoom { animation: none; } .escena, .panel, .panel-interior, .desplegable, .velo, .seccion, .contenido { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { .zoom { animation: none; } .escena, .panel, .panel-interior, .velo, .contenido, .contenido-interior, .franja { transition: none !important; } }
 
 /* ───────── Móvil: franjas abajo ───────── */
 @media (max-width: 899px) {
@@ -148,35 +150,26 @@ img { display: block; }
     display: flex; justify-content: space-between; align-items: center; width: 100%; height: var(--franja);
     padding: 0 var(--g); background: var(--puntos-arriba);
     font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase;
+    transition: background-color .3s ease;
   }
   .franja span:last-child { font-size: 18px; font-weight: 300; }
   .pie-movil { display: flex; align-items: center; gap: 24px; height: var(--franja); padding: 0 var(--g); background: var(--puntos-arriba); }
   .pie-movil a { font-family: var(--grotesk); font-weight: 400; font-size: 15px; text-transform: uppercase; padding: 12px 0; }
 
-  .desplegable {
-    /* no llega arriba del todo: deja ver un poco la página */
-    display: flex; flex-direction: column; position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; top: 12dvh; background: var(--menta);
-    transform: translateY(100%); visibility: hidden;
-    transition: transform var(--tiempo) var(--suave), visibility 0s linear var(--tiempo);
+  /* acordeón: el contenido de la franja abierta crece hacia arriba y empuja las franjas de encima */
+  .seccion .contenido {
+    height: 0; overflow: hidden; background: var(--abierto);
+    transition: height .7s var(--suave);
   }
-  .desplegable.abierto { transform: none; visibility: visible; transition: transform var(--tiempo) var(--suave), visibility 0s; }
+  .seccion.abierta .contenido { height: calc(88dvh - var(--alto-menu)); overflow-y: auto; }
+  .seccion.abierta > .franja { background: var(--abierto) var(--puntos-arriba); }
+  .contenido-interior { padding: 20px var(--g) 40px; opacity: 0; transition: opacity .3s ease; }
+  .seccion.abierta .contenido-interior { opacity: 1; transition: opacity .45s ease .2s; }
   .velo {
-    display: block; position: fixed; z-index: 39; inset: 0; background: rgba(58, 58, 56, .15);
-    opacity: 0; pointer-events: none; transition: opacity var(--tiempo) ease;
+    display: block; position: fixed; z-index: 19; inset: 0; background: rgba(58, 58, 56, .15);
+    opacity: 0; pointer-events: none; transition: opacity .5s ease;
   }
   .velo.abierto { opacity: 1; pointer-events: auto; }
-  /* cada sección mide una franja; la abierta crece hasta llenar el hueco (casi 0 → 1 para que la transición sea continua) */
-  .seccion {
-    flex: .0001 0 var(--franja); min-height: 0; display: flex; flex-direction: column; overflow: hidden;
-    transition: flex-grow var(--tiempo) var(--suave);
-  }
-  .seccion.abierta { flex-grow: 1; }
-  .seccion > .franja { flex: none; }
-  .seccion .contenido { opacity: 0; transition: opacity .25s ease; }
-  .seccion.abierta .contenido { opacity: 1; transition: opacity .35s ease .15s; }
-  .seccion.abierta > .franja { background: var(--abierto) var(--puntos-arriba); }
-  .seccion.abierta .contenido { background: var(--abierto); }
-  .contenido { flex: 1; min-height: 0; overflow-y: auto; padding: 28px var(--g) 48px; }
   .acerca .foto { width: 167px; }
   .cv { grid-template-columns: 1fr; }
   .cv-col { gap: 24px; }
