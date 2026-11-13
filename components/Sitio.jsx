@@ -7,7 +7,7 @@ import { OBRAS, ACERCA, CV, REDES } from '../lib/contenido';
 const INICIO = OBRAS[0].id;
 const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV']];
 // Ancho de cada panel lateral en escritorio
-const ANCHO_PANEL = { obras: '620px', acerca: '740px', cv: 'min(1040px, 66vw)' };
+const ANCHO_PANEL = { obras: '480px', acerca: '540px', cv: 'min(820px, 56vw)' };
 const fichaDe = o => `(${o.titulo}). ${o.año}.${o.ficha ? ' ' + o.ficha : ''}`;
 const obra = id => OBRAS.find(o => o.id === id);
 const enlace = ([texto, url]) => (
@@ -79,7 +79,6 @@ export default function Sitio() {
   const [abierta, setAbierta] = useState(null);   // sección abierta: 'obras' | 'acerca' | 'cv' | null
   const [zoom, setZoom] = useState(null);         // { lista, i, alt }
   const [movil, setMovil] = useState(false);
-  const [ultima, setUltima] = useState('obras');  // sección que se ve mientras el desplegable móvil baja al cerrarse
   const toque = useRef(null);                      // x donde empezó el dedo, para el swipe entre fotos
   const deslizo = useRef(false);                   // el último toque en la ampliación fue un swipe, no un tap
 
@@ -103,9 +102,8 @@ export default function Sitio() {
     return () => mq.removeEventListener('change', ver);
   }, []);
 
-  useEffect(() => { if (abierta) setUltima(abierta); }, [abierta]);
 
-  // En móvil el desplegable ocupa la pantalla: la página de detrás no se mueve
+  // En móvil, con el menú abierto la página de detrás no se mueve
   useEffect(() => {
     document.body.style.overflow = abierta && movil ? 'hidden' : '';
   }, [abierta, movil]);
@@ -177,31 +175,23 @@ export default function Sitio() {
         ))}
       </aside>
 
-      {/* ───────── Móvil: franjas abajo que se despliegan a pantalla completa ───────── */}
+      {/* ───────── Móvil: franjas abajo; al abrir una, sube y deja ver su contenido debajo ───────── */}
       <nav className="menu" aria-label="Menú">
         {SECCIONES.map(([id, titulo]) => (
-          <button key={id} type="button" className="franja" onClick={() => setAbierta(id)}>
-            <span>{titulo}</span><span aria-hidden="true">+</span>
-          </button>
+          <section key={id} className={'seccion' + (abierta === id && movil ? ' abierta' : '')}>
+            <button type="button" className="franja" aria-expanded={abierta === id} onClick={() => alternar(id)}>
+              <span>{titulo}</span><span aria-hidden="true">{abierta === id ? '−' : '+'}</span>
+            </button>
+            {/* el contenido crece de 0 a su alto: la franja y las de encima suben */}
+            <div className="contenido" inert={abierta !== id || !movil}>
+              <div className="contenido-interior">{movil && contenido(id)}</div>
+            </div>
+          </section>
         ))}
         <div className="pie-movil">{REDES.map(enlace)}</div>
       </nav>
       {/* velo sobre la página: al hacer clic o tocar fuera del menú, se cierra (en móvil además oscurece un poco) */}
       <div className={'velo' + (abierta ? ' abierto' : '')} aria-hidden="true" onClick={() => setAbierta(null)} />
-      {movil && (
-        <div className={'desplegable' + (abierta ? ' abierto' : '')} role="dialog" aria-modal="true" inert={!abierta}
-          aria-label={SECCIONES.find(s => s[0] === (abierta ?? ultima))[1]}>
-          {SECCIONES.map(([id, titulo]) => (
-            <section key={id} className={'seccion' + ((abierta ?? ultima) === id ? ' abierta' : '')}>
-              <button type="button" className="franja" aria-expanded={abierta === id} onClick={() => alternar(id)}>
-                <span>{titulo}</span><span aria-hidden="true">{(abierta ?? ultima) === id ? '−' : '+'}</span>
-              </button>
-              {/* todas montadas: abrir una sección es animar su alto */}
-              <div className="contenido" inert={(abierta ?? ultima) !== id}>{contenido(id)}</div>
-            </section>
-          ))}
-        </div>
-      )}
 
       {/* ───────── Imagen ampliada ───────── */}
       {zoom && (
