@@ -42,8 +42,8 @@ function ListaObras({ seleccion, onElegir, onPasar }) {
 function Acerca({ onAmpliar }) {
   return (
     <div className="acerca">
-      <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={1171} height={1500} sizes="170px" onClick={onAmpliar} />
       <p>{ACERCA.texto}</p>
+      <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={1171} height={1500} sizes="170px" onClick={onAmpliar} />
       <nav className="redes">{REDES.map(enlace)}</nav>
     </div>
   );
@@ -57,6 +57,7 @@ function CVColumnas() {
     </div>
   );
   return (
+    <div className="cv-panel">
     <div className="cv">
       <div className="cv-col">
         {bloque(['Exposiciones individuales', CV['Exposiciones individuales']])}
@@ -65,6 +66,8 @@ function CVColumnas() {
         {bloque(['Reconocimientos', CV['Reconocimientos']])}
       </div>
       <div className="cv-col">{bloque(['Exposiciones colectivas', CV['Exposiciones colectivas']])}</div>
+    </div>
+    <nav className="redes">{REDES.map(enlace)}</nav>
     </div>
   );
 }
