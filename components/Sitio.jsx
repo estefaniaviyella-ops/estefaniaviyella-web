@@ -120,15 +120,26 @@ export default function Sitio() {
   const idx = mostrada === seleccion ? imagen : 0;
   const n = o.imagenes?.length ?? 0;
 
-  // pasar a la obra anterior o siguiente sin abrir el menú
-  const pasarObra = useCallback(paso => {
-    const actual = obra(seleccion);
-    const lista = OBRAS.filter(o => o.seccion === actual.seccion);
-    const i = lista.findIndex(o => o.id === seleccion);
-    const sig = lista[(i + paso + lista.length) % lista.length];
-    setSeleccion(sig.id); setImagen(0);
+  // recorrido continuo: primero las fotos de la obra y, al acabar, la obra siguiente
+  const pasar = useCallback(paso => {
+    const i = OBRAS.findIndex(x => x.id === seleccion);
+    const actual = OBRAS[i];
+    const fotos = actual.imagenes?.length ?? 1;
+    const dentro = imagen + paso;
+    if (dentro >= 0 && dentro < fotos) { setImagen(dentro); return; }
+    const sig = OBRAS[(i + paso + OBRAS.length) % OBRAS.length];
+    setSeleccion(sig.id);
+    setImagen(paso > 0 ? 0 : (sig.imagenes?.length ?? 1) - 1);
     try { history.replaceState(null, '', sig.id === INICIO ? location.pathname : '#' + sig.id); } catch {}
-  }, [seleccion]);
+  }, [seleccion, imagen]);
+
+  // aviso de la sección que viene, cuando esta es la última obra de la suya
+  const seccionSiguiente = (() => {
+    const i = OBRAS.findIndex(x => x.id === seleccion);
+    const sig = OBRAS[(i + 1) % OBRAS.length];
+    const fotos = OBRAS[i].imagenes?.length ?? 1;
+    return imagen === fotos - 1 && sig.seccion !== OBRAS[i].seccion ? sig.seccion : null;
+  })();
 
   const elegir = useCallback(id => {
     setSeleccion(id); setVista(null); setImagen(0); setAbierta(null);
@@ -164,12 +175,12 @@ export default function Sitio() {
         if (m > 1 && e.key === 'ArrowLeft') setZoom(z => ({ ...z, i: (z.i - 1 + m) % m }));
         if (m > 1 && e.key === 'ArrowRight') setZoom(z => ({ ...z, i: (z.i + 1) % m }));
       } else if (e.key === 'Escape') setAbierta(null);
-      else if (!abierta && e.key === 'ArrowLeft') pasarObra(-1);
-      else if (!abierta && e.key === 'ArrowRight') pasarObra(1);
+      else if (!abierta && e.key === 'ArrowLeft') pasar(-1);
+      else if (!abierta && e.key === 'ArrowRight') pasar(1);
     };
     addEventListener('keydown', tecla);
     return () => removeEventListener('keydown', tecla);
-  }, [zoom, abierta, pasarObra]);
+  }, [zoom, abierta, pasar]);
 
   const ampliarAcerca = () => setZoom({ lista: [ACERCA.foto], i: 0, alt: 'Estefanía Viyella' });
   const alternar = id => { setVista(null); setAbierta(a => (a === id ? null : id)); };
@@ -192,9 +203,9 @@ export default function Sitio() {
           onTouchStart={e => { toque.current = e.touches[0].clientX; }}
           onTouchEnd={e => {
             const x0 = toque.current; toque.current = null;
-            if (x0 == null || n < 2) return;
+            if (x0 == null) return;
             const dx = e.changedTouches[0].clientX - x0;
-            if (Math.abs(dx) > 40) setImagen(i => (i + (dx < 0 ? 1 : -1) + n) % n);
+            if (Math.abs(dx) > 40) pasar(dx < 0 ? 1 : -1);
           }}>
           {o.imagenes ? (
             <Obra key={o.id + idx} src={o.imagenes[idx][0]} w={o.imagenes[idx][1]} h={o.imagenes[idx][2]} alt={o.titulo}
@@ -202,9 +213,10 @@ export default function Sitio() {
           ) : (
             <div className="hueco obra-img" style={{ '--r': o.hueco[1] / o.hueco[0], aspectRatio: `${o.hueco[0]} / ${o.hueco[1]}` }} />
           )}
-          <div className="flechas" style={{ visibility: n > 1 && !vista ? 'visible' : 'hidden' }}>
-            <button type="button" aria-label="Imagen anterior" onClick={() => setImagen((imagen - 1 + n) % n)}>←</button>
-            <button type="button" aria-label="Imagen siguiente" onClick={() => setImagen((imagen + 1) % n)}>→</button>
+          <div className="flechas">
+            <button type="button" aria-label="Anterior" onClick={() => pasar(-1)}>←</button>
+            <button type="button" aria-label="Siguiente" onClick={() => pasar(1)}>→</button>
+            {seccionSiguiente && <span className="aviso">{seccionSiguiente}</span>}
           </div>
         </figure>
         <p className="ficha">{fichaDe(o)}</p>
@@ -240,10 +252,6 @@ export default function Sitio() {
           </section>
         ))}
       </nav>
-      {/* flechas grandes: pasan a la obra anterior o siguiente */}
-      <button type="button" className="paso anterior" aria-label="Obra anterior" onClick={() => pasarObra(-1)}>←</button>
-      <button type="button" className="paso siguiente" aria-label="Obra siguiente" onClick={() => pasarObra(1)}>→</button>
-
       {/* velo sobre la página: al hacer clic o tocar fuera del menú, se cierra (en móvil además oscurece un poco) */}
       <div className={'velo' + (abierta ? ' abierto' : '')} aria-hidden="true" onClick={() => setAbierta(null)} />
 
