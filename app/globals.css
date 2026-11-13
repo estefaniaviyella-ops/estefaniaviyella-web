@@ -197,5 +197,5 @@ img { display: block; }
 }
 .cinta-banda { pointer-events: visiblePainted; cursor: pointer; }
 .cinta-fondo { stroke: transparent; stroke-width: 50; pointer-events: stroke; }   /* invisible: solo sirve para el ratón */
-.cinta text { font-family: var(--mono); font-weight: 700; font-size: 26px; letter-spacing: .06em; fill: #E9CF7A; }   /* amarillo crema */
+.cinta text { font-family: var(--mono); font-weight: 400; font-size: 20px; letter-spacing: .02em; fill: #E9CF7A; }   /* misma letra que los textos, en amarillo crema */
 .panel-contacto .panel-interior { overflow-x: hidden; }
