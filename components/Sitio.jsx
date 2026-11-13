@@ -5,9 +5,11 @@ import Image from 'next/image';
 import { OBRAS, ACERCA, CV, REDES } from '../lib/contenido';
 
 const INICIO = OBRAS[0].id;
-const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV']];
-// Ancho de cada panel lateral en escritorio (la escena se encoge en la misma medida)
-const ANCHO_PANEL = { obras: '620px', acerca: '740px', cv: 'min(1040px, 66vw)' };
+const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV'], ['contacto', 'Contacto']];
+// Ancho de cada panel lateral en escritorio
+const ANCHO_PANEL = { obras: '620px', acerca: '740px', cv: 'min(1040px, 66vw)', contacto: '620px' };
+const MOTIVOS = ['Catálogo de obras disponibles', 'Encargo', 'Otro'];
+const CORREO = REDES.find(([, url]) => url.startsWith('mailto:'))[1].slice(7);
 const fichaDe = o => `(${o.titulo}). ${o.año}.${o.ficha ? ' ' + o.ficha : ''}`;
 const obra = id => OBRAS.find(o => o.id === id);
 const enlace = ([texto, url]) => (
@@ -45,6 +47,38 @@ function Acerca({ onAmpliar }) {
       <Image className="foto" src={'/img/' + ACERCA.foto} alt="Estefanía Viyella" width={1171} height={1500} sizes="220px" onClick={onAmpliar} />
       <p>{ACERCA.texto}</p>
       <nav className="redes">{REDES.map(enlace)}</nav>
+    </div>
+  );
+}
+
+// Formulario de contacto: al enviar abre el correo de quien escribe con el mensaje ya preparado
+function Contacto() {
+  const [motivo, setMotivo] = useState(MOTIVOS[0]);
+  const mensaje = useRef(null);
+  const enviar = e => {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const asunto = `${motivo} · ${f.get('nombre')}`;
+    const cuerpo = `${f.get('mensaje')}\n\n${f.get('nombre')}\n${f.get('email')}`;
+    location.href = `mailto:${CORREO}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+  };
+  return (
+    <div className="contacto">
+      <button type="button" className="banda" onClick={() => { setMotivo(MOTIVOS[0]); mensaje.current?.focus(); }}>
+        <span>Escríbeme para recibir el catálogo de obras disponibles</span><span aria-hidden="true">→</span>
+      </button>
+      <form onSubmit={enviar}>
+        <fieldset className="motivos">
+          <legend>Motivo</legend>
+          {MOTIVOS.map(m => (
+            <label key={m}><input type="radio" name="motivo" checked={motivo === m} onChange={() => setMotivo(m)} /> {m}</label>
+          ))}
+        </fieldset>
+        <label>Nombre<input name="nombre" required autoComplete="name" /></label>
+        <label>Email<input name="email" type="email" required autoComplete="email" /></label>
+        <label>Mensaje<textarea ref={mensaje} name="mensaje" rows={5} /></label>
+        <button type="submit" className="enviar">Enviar</button>
+      </form>
     </div>
   );
 }
@@ -95,7 +129,7 @@ export default function Sitio() {
     ver(); mq.addEventListener('change', ver);
     const h = location.hash.slice(1);
     if (obra(h)) setSeleccion(h);
-    else if (h === 'acerca' || h === 'cv') setAbierta(h);
+    else if (h === 'acerca' || h === 'cv' || h === 'contacto') setAbierta(h);
     return () => mq.removeEventListener('change', ver);
   }, []);
 
@@ -126,6 +160,7 @@ export default function Sitio() {
       {id === 'obras' && <ListaObras seleccion={seleccion} onElegir={elegir} />}
       {id === 'acerca' && <Acerca onAmpliar={ampliarAcerca} />}
       {id === 'cv' && <CVColumnas />}
+      {id === 'contacto' && <Contacto />}
     </>
   );
 
