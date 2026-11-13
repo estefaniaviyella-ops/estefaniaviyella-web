@@ -104,6 +104,9 @@ function CVColumnas() {
   );
 }
 
+// nombre corto de cada sección para el aviso de las flechas
+const ETIQUETA = { 'Selección reciente': 'recientes' };
+
 export default function Sitio() {
   const [seleccion, setSeleccion] = useState(INICIO);
   const [vista, setVista] = useState(null);       // obra bajo el ratón en el listado (escritorio)
@@ -216,7 +219,7 @@ export default function Sitio() {
           <div className="flechas">
             <button type="button" aria-label="Anterior" onClick={() => pasar(-1)}>←</button>
             <button type="button" aria-label="Siguiente" onClick={() => pasar(1)}>→</button>
-            {seccionSiguiente && <span className="aviso">Ver {seccionSiguiente}</span>}
+            {seccionSiguiente && <span className="aviso">Ver {ETIQUETA[seccionSiguiente] ?? seccionSiguiente}</span>}
           </div>
         </figure>
         <p className="ficha">{fichaDe(o)}</p>
