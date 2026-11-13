@@ -80,8 +80,7 @@ img { display: block; }
 .panel.abierto .panel-interior { opacity: 1; transition: opacity .4s ease .12s; }
 .panel-obras .panel-interior, .panel-obras.abierto { width: 480px; }
 .panel-acerca .panel-interior, .panel-acerca.abierto { width: 540px; }
-.panel-acerca .panel-interior, .panel-cv .panel-interior { padding-bottom: 14px; }
-.panel-acerca .panel-interior { padding-top: 16vh; }   /* Acerca es largo: empieza algo antes y cabe entero */   /* Instagram y Email a la altura del − */
+.panel-acerca .panel-interior, .panel-cv .panel-interior { padding-bottom: 14px; }   /* Instagram y Email a la altura del − */
 .panel-cv .panel-interior, .panel-cv.abierto { width: min(820px, 56vw); }
 
 /* ───────── Contenidos (panel en escritorio, menú desplegado en móvil) ───────── */
@@ -95,7 +94,7 @@ img { display: block; }
 }
 .filas li.sel .titulo, .filas li a:hover .titulo { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
-.acerca { display: flex; flex-direction: column; gap: 20px; min-height: 100%; }
+.acerca { display: flex; flex-direction: column; gap: 20px; }
 .acerca .foto { margin-top: 56px; }   /* la foto, separada del texto */
 .acerca .foto, .foto-suave { filter: contrast(.82) brightness(1.06); }   /* retrato con menos contraste */
 .acerca .foto { width: 170px; height: auto; cursor: zoom-in; }
