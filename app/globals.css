@@ -172,7 +172,7 @@ img { display: block; }
   .seccion.abierta .contenido { opacity: 1; transition: opacity .35s ease .15s; }
   .seccion.abierta > .franja { background: var(--abierto) var(--puntos-arriba); }
   .seccion.abierta .contenido { background: var(--abierto); }
-  .contenido { flex: 1; min-height: 0; overflow-y: auto; padding: 28px var(--g) 48px; }
+  .contenido { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 28px var(--g) 48px; }
   .acerca .foto { width: 167px; }
   .cv { grid-template-columns: 1fr; }
   .cv-col { gap: 24px; }
@@ -180,21 +180,22 @@ img { display: block; }
 }
 
 /* ───────── Contacto ───────── */
-.contacto { display: flex; flex-direction: column; gap: 32px; max-width: 520px; }
-.banda {
-  display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%;
-  padding: 16px 18px; background: var(--tinta); color: var(--fondo);
-  font-weight: 400; font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
-}
-.contacto form { display: flex; flex-direction: column; gap: 22px; }
-.contacto label, .motivos legend { display: flex; flex-direction: column; gap: 6px; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
-.contacto input:not([type=radio]), .contacto textarea {
+.contacto { position: relative; display: flex; flex-direction: column; min-height: 100%; }
+.contacto form { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 22px; max-width: 520px; }
+.contacto label { display: flex; flex-direction: column; gap: 6px; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+.contacto input, .contacto textarea {
   font: inherit; font-size: 14px; font-weight: 300; text-transform: none; letter-spacing: 0; color: var(--tinta);
   background: transparent; border: 0; border-bottom: 1px solid var(--linea); border-radius: 0; padding: 8px 0; outline: none; resize: vertical;
 }
 .contacto input:focus, .contacto textarea:focus { border-bottom-color: var(--tinta); }
-.motivos { border: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; }
-.motivos legend { margin-bottom: 10px; }
-.motivos label { flex-direction: row; align-items: center; gap: 8px; font-size: 13px; font-weight: 300; text-transform: none; letter-spacing: 0; cursor: pointer; }
-.motivos input { accent-color: var(--tinta); }
 .enviar { align-self: flex-start; padding: 12px 28px; background: var(--tinta); color: var(--fondo); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
+
+/* cinta curva amarillo crema que corre por detrás; solo la banda recibe el ratón */
+.cinta {
+  display: block; margin-top: auto; margin-left: calc(-1 * var(--g)); width: calc(100% + 2 * var(--g)); height: auto;
+  overflow: visible; pointer-events: none;
+}
+.cinta-banda { pointer-events: visiblePainted; cursor: pointer; }
+.cinta-fondo { stroke: #F3E3A6; stroke-width: 50; }
+.cinta text { font-family: var(--mono); font-weight: 400; font-size: 18px; letter-spacing: .08em; fill: var(--tinta); }
+.panel-contacto .panel-interior { overflow-x: hidden; }
