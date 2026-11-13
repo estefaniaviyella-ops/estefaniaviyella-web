@@ -80,6 +80,7 @@ img { display: block; }
 .panel.abierto .panel-interior { opacity: 1; transition: opacity .4s ease .12s; }
 .panel-obras .panel-interior, .panel-obras.abierto { width: 620px; }
 .panel-acerca .panel-interior, .panel-acerca.abierto { width: 740px; }
+.panel-acerca .panel-interior { padding-bottom: 14px; }   /* Instagram y Email a la altura del − */
 .panel-cv .panel-interior, .panel-cv.abierto { width: min(1040px, 66vw); }
 
 /* ───────── Contenidos (panel en escritorio, desplegable en móvil) ───────── */
