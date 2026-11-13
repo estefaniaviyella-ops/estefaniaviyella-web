@@ -93,10 +93,10 @@ img { display: block; }
 }
 .filas li.sel .titulo, .filas li a:hover .titulo { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
-.acerca { display: flex; flex-direction: column; gap: 28px; }
+.acerca { display: flex; flex-direction: column; gap: 28px; min-height: 100%; }
 .acerca .foto { width: 220px; height: auto; cursor: zoom-in; }
 .acerca p { font-size: 14px; line-height: 1.5; white-space: pre-line; }
-.redes { display: flex; gap: 24px; }
+.redes { display: flex; gap: 24px; margin-top: auto; }   /* Instagram y Email al fondo del panel */
 .redes a { font-family: var(--grotesk); font-weight: 500; font-size: 14px; text-transform: uppercase; padding: 8px 0; }
 
 .cv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; align-items: start; }
