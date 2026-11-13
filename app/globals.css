@@ -53,6 +53,8 @@ img { display: block; }
   width: auto; max-width: var(--ancho-img); cursor: zoom-in;
 }
 .visor .hueco { background: var(--hueco); cursor: default; }
+/* fotos que se descargan en segundo plano: ocupan 1px y no se ven */
+.precarga { position: fixed; left: 0; bottom: 0; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
 /* flechas siempre en el mismo sitio: esquina de abajo a la izquierda */
 .visor .flechas { position: absolute; left: 72px; bottom: 22px; display: flex; gap: 12px; font-size: 12px; min-height: 18px; }
 .ficha {
