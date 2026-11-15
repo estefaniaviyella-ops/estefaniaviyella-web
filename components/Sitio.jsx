@@ -9,10 +9,12 @@ const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv'
 // Ancho de cada panel lateral en escritorio
 const ANCHO_PANEL = { obras: '480px', acerca: '540px', cv: 'min(820px, 56vw)' };
 // primera línea: el título; segunda línea: técnica, medidas, año y edición
-const fichaDe = o => {
-  const abajo = [o.ficha, o.año && o.año + '.', o.edicion].filter(Boolean).join(' ');
-  return `(${o.titulo}).${abajo ? '\n' + abajo : ''}`;
-};
+const fichaDe = o => [
+  `(${o.titulo})`,
+  o.tecnica,
+  [o.medidas, o.año].filter(Boolean).join('. '),
+  o.edicion,
+].filter(Boolean).join('\n');
 const obra = id => OBRAS.find(o => o.id === id);
 const enlace = ([texto, url]) => (
   <a key={texto} href={url} target={url.startsWith('http') ? '_blank' : undefined} rel="noopener">{texto}</a>
@@ -55,7 +57,7 @@ function Tienda() {
             sizes="(min-width: 900px) 160px, 33vw" quality={80} />
           <figcaption className="info">
             <span className="t">({p.titulo})</span>
-            <span className="f">{p.ficha}</span>
+            <span className="f">{[p.tecnica, p.medidas].filter(Boolean).join('\n')}</span>
             <span className="p">{p.precio || 'Próximamente'}</span>
           </figcaption>
         </figure>
