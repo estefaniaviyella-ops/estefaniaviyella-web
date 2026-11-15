@@ -19,7 +19,7 @@ const enlace = ([texto, url]) => (
 );
 const EntradaCV = ({ e: [t, l, a] }) => <p>{`${t}\n${l}\n${a}`}</p>;
 
-const MEDIDAS = '(min-width: 900px) 75vw, 100vw';   // mismo valor en el visor y en la precarga
+const MEDIDAS = '(min-width: 900px) 85vw, 100vw';   // mismo valor en el visor y en la precarga
 const CALIDAD = 96;
 
 // Imagen de una obra a la medida del hueco libre (el CSS fija el alto con --alto-img y --ancho-img)
@@ -122,6 +122,8 @@ export default function Sitio() {
   const o = obra(mostrada);
   const idx = mostrada === seleccion ? imagen : 0;
   const n = o.imagenes?.length ?? 0;
+  // una foto apaisada se muestra más grande: empieza más a la izquierda
+  const apaisada = !!o.imagenes && o.imagenes[idx][1] > o.imagenes[idx][2];
 
   // recorrido continuo: primero las fotos de la obra y, al acabar, la obra siguiente
   const pasar = useCallback(paso => {
@@ -202,7 +204,7 @@ export default function Sitio() {
       {/* ───────── Obra ───────── */}
       <main className="escena" aria-live="polite">
         {/* deslizar el dedo a izquierda o derecha pasa a la foto siguiente o anterior */}
-        <figure className="visor"
+        <figure className={'visor' + (apaisada ? ' ancha' : '')}
           onTouchStart={e => { toque.current = e.touches[0].clientX; }}
           onTouchEnd={e => {
             const x0 = toque.current; toque.current = null;
