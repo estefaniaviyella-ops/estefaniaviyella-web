@@ -50,7 +50,7 @@ img { display: block; }
 }
 .visor { display: inline-flex; flex-direction: column; transition: margin-left var(--tiempo) var(--suave); }
 /* apaisadas: arrancan más a la izquierda para verse mucho más grandes */
-.visor.ancha { margin-left: -16vw; --ancho-img: calc(100vw - var(--lateral) - 1vw); --alto-img: var(--alto-max); }
+.visor.ancha { margin-left: -4vw; --ancho-img: calc(100vw - var(--lateral) - 13vw); --alto-img: var(--alto-max); }
 .obra-img {
   height: min(var(--alto-img), calc(var(--ancho-img) * var(--r)));
   width: auto; max-width: var(--ancho-img); cursor: zoom-in;
@@ -62,7 +62,7 @@ img { display: block; }
 .visor .flechas { position: absolute; left: 17vw; bottom: 22px; display: flex; align-items: center; gap: 12px; font-size: 12px; min-height: 18px;
   transition: left var(--tiempo) var(--suave); }
 /* con una foto apaisada, las flechas se alinean con su borde izquierdo */
-.visor.ancha .flechas { left: 1vw; }
+.visor.ancha .flechas { left: 13vw; }
 .visor .flechas .aviso { font-family: var(--grotesk); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; opacity: .55; }
 .ficha {
   position: absolute; z-index: 5; right: var(--g); bottom: 24px; width: min(640px, 30vw);
@@ -162,7 +162,8 @@ img { display: block; }
   /* en móvil todas las fotos ocupan la misma caja; las apaisadas se salen por los lados */
   .visor.ancha { margin-left: 0; }
   .escena { overflow: hidden; }
-  .obra-img { width: 100vw; height: var(--alto-img); max-width: none; object-fit: cover; }
+  /* todas las apaisadas con la misma altura; el ancho se sale de la pantalla */
+  .visor.ancha .obra-img { height: min(var(--alto-img), 110vw); width: auto; max-width: none; }
   .visor .flechas { left: auto; }
   .ficha { text-align: center; }
   .ficha { position: static; width: 100%; margin-top: auto; padding-top: 10px; }
