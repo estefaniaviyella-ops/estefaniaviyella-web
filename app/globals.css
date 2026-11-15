@@ -47,7 +47,9 @@ img { display: block; }
   padding: 0 0 52px 17vw;   /* la obra arranca arriba del todo, algo hacia la derecha */
   transition: right var(--tiempo) var(--suave), padding var(--tiempo) var(--suave);
 }
-.visor { display: inline-flex; flex-direction: column; }
+.visor { display: inline-flex; flex-direction: column; transition: margin-left var(--tiempo) var(--suave); }
+/* apaisadas: arrancan más a la izquierda para verse mucho más grandes */
+.visor.ancha { margin-left: -12vw; --ancho-img: calc(100vw - var(--lateral) - 5vw); }
 .obra-img {
   height: min(var(--alto-img), calc(var(--ancho-img) * var(--r)));
   width: auto; max-width: var(--ancho-img); cursor: zoom-in;
