@@ -58,7 +58,10 @@ img { display: block; }
 /* fotos que se descargan en segundo plano: ocupan 1px y no se ven */
 .precarga { position: fixed; left: 0; bottom: 0; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
 /* flechas siempre en el mismo sitio: esquina de abajo a la izquierda */
-.visor .flechas { position: absolute; left: 17vw; bottom: 22px; display: flex; align-items: center; gap: 12px; font-size: 12px; min-height: 18px; }
+.visor .flechas { position: absolute; left: 17vw; bottom: 22px; display: flex; align-items: center; gap: 12px; font-size: 12px; min-height: 18px;
+  transition: left var(--tiempo) var(--suave); }
+/* con una foto apaisada, las flechas se alinean con su borde izquierdo */
+.visor.ancha .flechas { left: 5vw; }
 .visor .flechas .aviso { font-family: var(--grotesk); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; opacity: .55; }
 .ficha {
   position: absolute; z-index: 5; right: var(--g); bottom: 24px; width: min(640px, 30vw);
