@@ -16,6 +16,8 @@ const fichaDe = o => [
   o.edicion,
 ].filter(Boolean).join('\n');
 const obra = id => OBRAS.find(o => o.id === id);
+const TIENDA_INICIO = 'tienda';
+const pieza = id => TIENDA.find(p => p.id === id);
 const enlace = ([texto, url]) => (
   <a key={texto} href={url} target={url.startsWith('http') ? '_blank' : undefined} rel="noopener">{texto}</a>
 );
@@ -48,21 +50,47 @@ function Precarga({ obra: o }) {
 }
 
 // Tienda: mosaico de 3 × 3. Al pasar el ratón la foto se oscurece y aparece su ficha encima
-function Tienda() {
+// Tienda: mosaico de 3 × 3 en el lugar de la obra. Al pasar el ratón la foto se oscurece
+// y aparece su ficha encima; al pinchar se abre la pieza
+function Tienda({ onAbrir }) {
   return (
     <div className="tienda">
       {TIENDA.map(p => (
-        <figure key={p.id} className="pieza">
+        <button key={p.id} type="button" className="pieza" onClick={() => onAbrir(p.id)}>
           <Image src={'/img/' + p.imagen[0]} alt={p.titulo} width={p.imagen[1]} height={p.imagen[2]}
-            sizes="(min-width: 900px) 160px, 33vw" quality={80} />
-          <figcaption className="info">
+            sizes="(min-width: 900px) 230px, 33vw" quality={82} />
+          <span className="info">
             <span className="t">({p.titulo})</span>
             <span className="f">{[p.tecnica, p.medidas].filter(Boolean).join('\n')}</span>
             <span className="p">{p.precio || 'Próximamente'}</span>
-          </figcaption>
-        </figure>
+          </span>
+        </button>
       ))}
     </div>
+  );
+}
+
+// Ficha de una pieza de la tienda
+function PiezaTienda({ p, onVolver, onAmpliar }) {
+  return (
+    <>
+      <figure className="visor pieza-visor">
+        <Image src={'/img/' + p.imagen[0]} alt={p.titulo} width={p.imagen[1]} height={p.imagen[2]}
+          sizes={MEDIDAS} quality={CALIDAD} priority className="obra-img"
+          style={{ '--r': p.imagen[2] / p.imagen[1] }} onClick={onAmpliar} />
+        <div className="flechas">
+          <button type="button" onClick={onVolver}>←</button>
+          <span className="aviso">Tienda</span>
+        </div>
+      </figure>
+      <div className="ficha ficha-pieza">
+        <p>{[`(${p.titulo})`, p.tecnica, p.medidas, p.edicion].filter(Boolean).join('\n')}</p>
+        <p className="precio">{p.precio || 'Próximamente'}</p>
+        {p.precio
+          ? <a className="comprar" href={'mailto:estefania.viyellaoa@gmail.com?subject=' + encodeURIComponent(p.titulo)}>Consultar</a>
+          : null}
+      </div>
+    </>
   );
 }
 
@@ -74,8 +102,9 @@ function ListaObras({ seleccion, onElegir }) {
         <div key={seccion} className="grupo">
           {seccion === 'Selección reciente' && obras.length
             ? <h3><button type="button" className="ir" onClick={() => onElegir(obras[0].id)}>{seccion}</button></h3>
-            : <h3>{seccion}</h3>}
-          {seccion === 'Tienda' && <Tienda />}
+            : seccion === 'Tienda'
+              ? <h3><button type="button" className="ir" onClick={() => onElegir(TIENDA_INICIO)}>{seccion}</button></h3>
+              : <h3>{seccion}</h3>}
           {!obras.length && seccion !== 'Tienda' && <p className="pronto">Próximamente</p>}
           <ul className="filas" hidden={seccion === 'Selección reciente'}>
             {obras.map(ob => (
@@ -141,7 +170,9 @@ export default function Sitio() {
   const deslizo = useRef(false);                   // el último toque en la ampliación fue un swipe, no un tap
 
   const mostrada = vista ?? seleccion;
-  const o = obra(mostrada);
+  const enTienda = mostrada === TIENDA_INICIO;
+  const pz = pieza(mostrada);
+  const o = obra(mostrada) ?? OBRAS[0];
   const idx = mostrada === seleccion ? imagen : 0;
   const n = o.imagenes?.length ?? 0;
   // una foto apaisada se muestra más grande: empieza más a la izquierda
@@ -150,6 +181,7 @@ export default function Sitio() {
   // recorrido continuo: primero las fotos de la obra y, al acabar, la obra siguiente
   const pasar = useCallback(paso => {
     const i = OBRAS.findIndex(x => x.id === seleccion);
+    if (i < 0) return;   // en la tienda las flechas no pasan de obra
     const actual = OBRAS[i];
     const fotos = actual.imagenes?.length ?? 1;
     const dentro = imagen + paso;
@@ -163,6 +195,7 @@ export default function Sitio() {
   // aviso de la sección que viene, cuando esta es la última obra de la suya
   const seccionSiguiente = (() => {
     const i = OBRAS.findIndex(x => x.id === seleccion);
+    if (i < 0) return null;
     const sig = OBRAS[(i + 1) % OBRAS.length];
     const fotos = OBRAS[i].imagenes?.length ?? 1;
     return imagen === fotos - 1 && sig.seccion !== OBRAS[i].seccion ? sig.seccion : null;
@@ -183,7 +216,7 @@ export default function Sitio() {
     const ver = () => setMovil(mq.matches);
     ver(); mq.addEventListener('change', ver);
     const h = location.hash.slice(1);
-    if (obra(h)) setSeleccion(h);
+    if (obra(h) || h === TIENDA_INICIO || pieza(h)) setSeleccion(h);
     else if (h === 'acerca' || h === 'cv') setAbierta(h);
     return () => mq.removeEventListener('change', ver);
   }, []);
@@ -224,7 +257,11 @@ export default function Sitio() {
       <a className="nombre" href="/" onClick={e => { e.preventDefault(); elegir(INICIO); }}>Estefanía Viyella</a>
 
       {/* ───────── Obra ───────── */}
-      <main className="escena" aria-live="polite">
+      <main className={'escena' + (enTienda ? ' escena-tienda' : '')} aria-live="polite">
+        {enTienda ? <Tienda onAbrir={elegir} /> : pz ? (
+          <PiezaTienda p={pz} onVolver={() => elegir(TIENDA_INICIO)}
+            onAmpliar={() => setZoom({ lista: [pz.imagen[0]], i: 0, alt: pz.titulo })} />
+        ) : (<>
         {/* deslizar el dedo a izquierda o derecha pasa a la foto siguiente o anterior */}
         <figure className={'visor' + (apaisada ? ' ancha' : '')}
           onTouchStart={e => { toque.current = e.touches[0].clientX; }}
@@ -248,6 +285,7 @@ export default function Sitio() {
         </figure>
         <p className="ficha">{fichaDe(o)}</p>
         {precargar && <Precarga obra={o} />}
+        </>)}
       </main>
 
       {/* ───────── Escritorio: pestañas verticales a la derecha ───────── */}
