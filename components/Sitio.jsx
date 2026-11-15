@@ -259,20 +259,22 @@ export default function Sitio() {
       <a className="nombre" href="/" onClick={e => { e.preventDefault(); elegir(INICIO); }}>Estefanía Viyella</a>
 
       {/* ───────── Obra ───────── */}
-      <main className={'escena' + (enTienda ? ' escena-tienda' : '')} aria-live="polite">
+      {/* deslizar el dedo a izquierda o derecha pasa a la foto siguiente o anterior;
+          hacia abajo se baja para leer la ficha entera */}
+      <main className={'escena' + (enTienda ? ' escena-tienda' : '')} aria-live="polite"
+        onTouchStart={e => { toque.current = [e.touches[0].clientX, e.touches[0].clientY]; }}
+        onTouchEnd={e => {
+          const p0 = toque.current; toque.current = null;
+          if (!p0) return;
+          const dx = e.changedTouches[0].clientX - p0[0];
+          const dy = e.changedTouches[0].clientY - p0[1];
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) pasar(dx < 0 ? 1 : -1);
+        }}>
         {enTienda ? <Tienda onAbrir={elegir} /> : pz ? (
           <PiezaTienda p={pz} onVolver={() => elegir(TIENDA_INICIO)}
             onAmpliar={() => setZoom({ lista: [pz.imagen[0]], i: 0, alt: pz.titulo })} />
         ) : (<>
-        {/* deslizar el dedo a izquierda o derecha pasa a la foto siguiente o anterior */}
-        <figure className={'visor' + (apaisada ? ' ancha' : '')}
-          onTouchStart={e => { toque.current = e.touches[0].clientX; }}
-          onTouchEnd={e => {
-            const x0 = toque.current; toque.current = null;
-            if (x0 == null) return;
-            const dx = e.changedTouches[0].clientX - x0;
-            if (Math.abs(dx) > 40) pasar(dx < 0 ? 1 : -1);
-          }}>
+        <figure className={'visor' + (apaisada ? ' ancha' : '')}>
           {o.imagenes ? (
             <Obra key={o.id + idx} src={o.imagenes[idx][0]} w={o.imagenes[idx][1]} h={o.imagenes[idx][2]} alt={o.titulo}
               onClick={() => setZoom({ lista: o.imagenes.map(([s]) => s), i: idx, alt: o.titulo })} />
