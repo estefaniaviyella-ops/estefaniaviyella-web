@@ -155,7 +155,7 @@ img { display: block; }
   padding: 9px; color: #FBFAF7; font-size: 10px; line-height: 1.35; opacity: 0; transition: opacity .3s ease;
 }
 .tienda .info .t { font-family: var(--grotesk); text-transform: uppercase; letter-spacing: .04em; }
-.tienda .info .f { opacity: .8; }
+.tienda .info .f { opacity: .8; white-space: pre-line; }
 .tienda .info .p { margin-top: 3px; }
 .tienda .pieza:hover img { filter: brightness(.38); }
 .tienda .pieza:hover .info { opacity: 1; }
