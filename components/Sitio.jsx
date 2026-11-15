@@ -17,6 +17,8 @@ const fichaDe = o => [
 ].filter(Boolean).join('\n');
 const obra = id => OBRAS.find(o => o.id === id);
 const TIENDA_INICIO = 'tienda';
+// La tienda está montada pero oculta: pon true para abrirla
+const TIENDA_ABIERTA = false;
 const pieza = id => TIENDA.find(p => p.id === id);
 const enlace = ([texto, url]) => (
   <a key={texto} href={url} target={url.startsWith('http') ? '_blank' : undefined} rel="noopener">{texto}</a>
@@ -102,10 +104,10 @@ function ListaObras({ seleccion, onElegir }) {
         <div key={seccion} className="grupo">
           {seccion === 'Selección reciente' && obras.length
             ? <h3><button type="button" className="ir" onClick={() => onElegir(obras[0].id)}>{seccion}</button></h3>
-            : seccion === 'Tienda'
+            : seccion === 'Tienda' && TIENDA_ABIERTA
               ? <h3><button type="button" className="ir" onClick={() => onElegir(TIENDA_INICIO)}>{seccion}</button></h3>
               : <h3>{seccion}</h3>}
-          {!obras.length && seccion !== 'Tienda' && <p className="pronto">Próximamente</p>}
+          {!obras.length && <p className="pronto">Próximamente</p>}
           <ul className="filas" hidden={seccion === 'Selección reciente'}>
             {obras.map(ob => (
               <li key={ob.id} className={ob.id === seleccion ? 'sel' : undefined}>
@@ -216,7 +218,7 @@ export default function Sitio() {
     const ver = () => setMovil(mq.matches);
     ver(); mq.addEventListener('change', ver);
     const h = location.hash.slice(1);
-    if (obra(h) || h === TIENDA_INICIO || pieza(h)) setSeleccion(h);
+    if (obra(h) || (TIENDA_ABIERTA && (h === TIENDA_INICIO || pieza(h)))) setSeleccion(h);
     else if (h === 'acerca' || h === 'cv') setAbierta(h);
     return () => mq.removeEventListener('change', ver);
   }, []);
