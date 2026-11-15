@@ -146,19 +146,32 @@ img { display: block; }
 @keyframes aparecer { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .zoom { animation: none; } .escena, .panel, .panel-interior, .velo, .contenido, .contenido-interior, .franja { transition: none !important; } }
 
-/* ───────── Tienda: mosaico 3 × 3 ───────── */
-.tienda { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 4px; }
-.tienda .pieza { position: relative; margin: 0; aspect-ratio: 1; overflow: hidden; background: var(--hueco); }
+/* ───────── Tienda: mosaico 3 × 3 en el lugar de la obra ───────── */
+.tienda {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  width: min(var(--ancho-img), var(--alto-img));
+}
+.tienda .pieza {
+  position: relative; display: block; padding: 0; border: 0; background: var(--hueco);
+  aspect-ratio: 1; overflow: hidden; cursor: pointer; font: inherit; color: inherit; text-align: left;
+}
 .tienda .pieza img { width: 100%; height: 100%; object-fit: cover; transition: filter .3s ease; }
 .tienda .info {
-  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 3px;
-  padding: 9px; color: #FBFAF7; font-size: 10px; line-height: 1.35; opacity: 0; transition: opacity .3s ease;
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
+  padding: 12px; color: #FBFAF7; font-size: 11px; line-height: 1.35; opacity: 0; transition: opacity .3s ease;
 }
 .tienda .info .t { font-family: var(--grotesk); text-transform: uppercase; letter-spacing: .04em; }
 .tienda .info .f { opacity: .8; white-space: pre-line; }
-.tienda .info .p { margin-top: 3px; }
-.tienda .pieza:hover img { filter: brightness(.38); }
-.tienda .pieza:hover .info { opacity: 1; }
+.tienda .info .p { margin-top: 4px; }
+.tienda .pieza:hover img, .tienda .pieza:focus-visible img { filter: brightness(.35); }
+.tienda .pieza:hover .info, .tienda .pieza:focus-visible .info { opacity: 1; }
+/* ficha de una pieza */
+.ficha-pieza .precio { margin-top: 14px; }
+.ficha-pieza .comprar {
+  display: inline-block; margin-top: 14px; padding: 8px 16px; border: 1px solid var(--linea);
+  background: var(--menta); font-family: var(--grotesk); font-size: 12px;
+  text-transform: uppercase; letter-spacing: .06em; text-decoration: none;
+}
 
 /* ───────── Móvil: franjas abajo ───────── */
 @media (max-width: 899px) {
@@ -176,9 +189,10 @@ img { display: block; }
   /* en móvil todas las fotos ocupan la misma caja; las apaisadas se salen por los lados */
   .visor.ancha { margin-left: 0; }
   /* sin ratón, la ficha de la tienda se lee siempre sobre la foto */
-  .tienda { gap: 8px; }
+  .tienda { width: 100%; gap: 8px; }
   .tienda .pieza img { filter: brightness(.45); }
   .tienda .info { opacity: 1; font-size: 9px; padding: 7px; }
+  .escena-tienda { justify-content: center; }
   .escena { overflow: hidden; }
   /* todas las apaisadas con la misma altura; el ancho se sale de la pantalla */
   .visor.ancha .obra-img { height: min(var(--alto-img), 110vw); width: auto; max-width: none; }
