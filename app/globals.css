@@ -30,7 +30,8 @@ img { display: block; }
 /* Escritorio: las pestañas ocupan la derecha; la obra no se mueve y el panel abierto la tapa por encima */
 .sitio {
   --lateral: calc(3 * var(--pestana));
-  --alto-img: calc(100vh - var(--contacto) - 52px);
+  --alto-max: calc(100vh - var(--contacto) - 52px);
+  --alto-img: calc(var(--alto-max) * .88);   /* las verticales, un punto más pequeñas */
   --ancho-img: calc(100vw - var(--lateral) - 17vw);
 }
 
@@ -49,7 +50,7 @@ img { display: block; }
 }
 .visor { display: inline-flex; flex-direction: column; transition: margin-left var(--tiempo) var(--suave); }
 /* apaisadas: arrancan más a la izquierda para verse mucho más grandes */
-.visor.ancha { margin-left: -12vw; --ancho-img: calc(100vw - var(--lateral) - 5vw); }
+.visor.ancha { margin-left: -16vw; --ancho-img: calc(100vw - var(--lateral) - 1vw); --alto-img: var(--alto-max); }
 .obra-img {
   height: min(var(--alto-img), calc(var(--ancho-img) * var(--r)));
   width: auto; max-width: var(--ancho-img); cursor: zoom-in;
@@ -61,7 +62,7 @@ img { display: block; }
 .visor .flechas { position: absolute; left: 17vw; bottom: 22px; display: flex; align-items: center; gap: 12px; font-size: 12px; min-height: 18px;
   transition: left var(--tiempo) var(--suave); }
 /* con una foto apaisada, las flechas se alinean con su borde izquierdo */
-.visor.ancha .flechas { left: 5vw; }
+.visor.ancha .flechas { left: 1vw; }
 .visor .flechas .aviso { font-family: var(--grotesk); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; opacity: .55; }
 .ficha {
   position: absolute; z-index: 5; right: var(--g); bottom: 24px; width: min(640px, 30vw);
@@ -158,6 +159,10 @@ img { display: block; }
   /* en móvil todo va centrado: la obra, las flechas y la ficha */
   .escena { right: 0; bottom: var(--alto-menu); flex-direction: column; align-items: center; justify-content: flex-start; padding: 0 8px 28px; }   /* un poco de aire entre la ficha y el menú */
   .visor { align-items: center; }
+  /* en móvil todas las fotos ocupan la misma caja; las apaisadas se salen por los lados */
+  .visor.ancha { margin-left: 0; }
+  .escena { overflow: hidden; }
+  .obra-img { width: 100vw; height: var(--alto-img); max-width: none; object-fit: cover; }
   .visor .flechas { left: auto; }
   .ficha { text-align: center; }
   .ficha { position: static; width: 100%; margin-top: auto; padding-top: 10px; }
