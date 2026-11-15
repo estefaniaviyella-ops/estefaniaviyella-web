@@ -2,7 +2,7 @@
 
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { OBRAS, SECCIONES_OBRA, ACERCA, CV, REDES } from '../lib/contenido';
+import { OBRAS, SECCIONES_OBRA, TIENDA, ACERCA, CV, REDES } from '../lib/contenido';
 
 const INICIO = OBRAS[0].id;
 const SECCIONES = [['obras', 'Obras seleccionadas'], ['acerca', 'Acerca'], ['cv', 'CV']];
@@ -45,6 +45,25 @@ function Precarga({ obra: o }) {
   );
 }
 
+// Tienda: mosaico de 3 × 3. Al pasar el ratón la foto se oscurece y aparece su ficha encima
+function Tienda() {
+  return (
+    <div className="tienda">
+      {TIENDA.map(p => (
+        <figure key={p.id} className="pieza">
+          <Image src={'/img/' + p.imagen[0]} alt={p.titulo} width={p.imagen[1]} height={p.imagen[2]}
+            sizes="(min-width: 900px) 160px, 33vw" quality={80} />
+          <figcaption className="info">
+            <span className="t">({p.titulo})</span>
+            <span className="f">{p.ficha}</span>
+            <span className="p">{p.precio || 'Próximamente'}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  );
+}
+
 function ListaObras({ seleccion, onElegir }) {
   const grupos = SECCIONES_OBRA.map(s => [s, OBRAS.filter(o => o.seccion === s)]);
   return (
@@ -54,7 +73,8 @@ function ListaObras({ seleccion, onElegir }) {
           {seccion === 'Selección reciente' && obras.length
             ? <h3><button type="button" className="ir" onClick={() => onElegir(obras[0].id)}>{seccion}</button></h3>
             : <h3>{seccion}</h3>}
-          {!obras.length && <p className="pronto">Próximamente</p>}
+          {seccion === 'Tienda' && <Tienda />}
+          {!obras.length && seccion !== 'Tienda' && <p className="pronto">Próximamente</p>}
           <ul className="filas" hidden={seccion === 'Selección reciente'}>
             {obras.map(ob => (
               <li key={ob.id} className={ob.id === seleccion ? 'sel' : undefined}>
