@@ -178,7 +178,7 @@ img { display: block; }
   :root { --g: 16px; }
   .sitio {
     --alto-menu: calc(3 * var(--franja));   /* las tres franjas del menú */
-    --alto-img: calc(100dvh - var(--alto-menu) - 108px);
+    --alto-img: calc(100dvh - var(--alto-menu) - 132px);
     --ancho-img: calc(100vw - 16px);
   }
   .lateral { display: none; }
@@ -193,15 +193,16 @@ img { display: block; }
   .tienda .pieza img { filter: brightness(.45); }
   .tienda .info { opacity: 1; font-size: 9px; padding: 7px; }
   .escena-tienda { justify-content: center; }
-  .escena { overflow: hidden; }
+  /* se puede bajar con el dedo para leer la ficha entera; el swipe lateral sigue pasando de obra */
+  .escena { overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
   /* todas las apaisadas con la misma altura; el ancho se sale de la pantalla */
-  .visor.ancha .obra-img { height: min(var(--alto-img), 110vw); width: auto; max-width: none; }
+  .visor.ancha .obra-img { height: min(var(--alto-img), 92vw); width: auto; max-width: none; }
   .visor .flechas { left: auto; }
   .ficha { text-align: center; }
-  .ficha { position: static; width: 100%; margin-top: auto; padding-top: 10px; }
+  .ficha { position: static; width: 100%; margin-top: auto; padding-top: 14px; padding-bottom: 4px; }
   .visor .flechas { position: static; align-self: center; margin-top: 10px; gap: 24px; }
   .visor .flechas button { padding: 6px 10px; }   /* más fácil de tocar */
-  .visor { touch-action: pan-y; }
+  .escena { touch-action: pan-y; }
 
   .menu { display: block; position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; background: var(--menta); }
   .franja {
