@@ -7,7 +7,8 @@
   --hueco: #E7E4DC;
   --mono: var(--fuente-mono), "DM Mono", ui-monospace, monospace;
   /* a falta de Neue Haas Grotesk: Helvetica Neue en Mac, Inter Tight en el resto */
-  --grotesk: "Helvetica Neue", var(--fuente-grotesk), Helvetica, Arial, sans-serif;
+  --grotesk: "Neue Haas Grotesk Display Pro", "Neue Haas Grotesk Text Pro", "Helvetica Neue",
+    var(--fuente-grotesk), Helvetica, Arial, sans-serif;
   /* línea de puntos de 1px (arriba, abajo, izquierda) */
   --puntos-arriba: linear-gradient(to right, var(--linea) 1px, transparent 1px) 0 0 / 2px 1px repeat-x;
   --puntos-abajo: linear-gradient(to right, var(--linea) 1px, transparent 1px) 0 100% / 2px 1px repeat-x;
@@ -117,6 +118,8 @@ img { display: block; }
 .acerca .foto, .foto-suave { filter: contrast(.82) brightness(1.06); }   /* retrato con menos contraste */
 .acerca .foto { width: 170px; height: auto; cursor: zoom-in; }
 .acerca p { max-width: 420px; font-size: 14.5px; line-height: 1.375; white-space: pre-line; }
+/* el texto de dentro de los paneles, en la grotesca */
+.panel-interior { font-family: var(--grotesk); font-weight: 400; letter-spacing: 0; }
 .acerca .gracias { align-self: flex-end; margin-top: -30px; font-family: var(--grotesk); font-size: 13px; opacity: .55; }
 .acerca .ingles { font-style: italic; }   /* la versión en inglés, debajo de la foto */
 .redes { display: flex; gap: 24px; margin-top: auto; }   /* Instagram y Email al fondo del panel */
